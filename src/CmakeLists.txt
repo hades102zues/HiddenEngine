@@ -1,0 +1,28 @@
+# List all source files
+set(runtime_source_paths
+    "engine-core/game-engine/engine.cpp"
+    "renderer/render-manager/renderer.cpp"
+)
+
+
+# Produce a static library from the source files
+add_library(runtime_lib STATIC ${runtime_source_paths})
+
+
+# Produce the executable
+add_executable(gm main.cpp)
+target_link_libraries(gm third_party_deps)
+target_link_libraries(gm runtime_lib)
+
+
+# Link system Frameworks and Libraries
+if (APPLE)
+    target_link_libraries( gm 
+        "-framework Cocoa" 
+        "-framework OpenGL" 
+        "-framework IOKit" 
+        "-framework CoreVideo"
+    )
+endif()
+
+

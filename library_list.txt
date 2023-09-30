@@ -1,0 +1,3 @@
+Windows & Input - SDL2
+Graphics API - OpenGL 3.3
+Logger - spdlog
