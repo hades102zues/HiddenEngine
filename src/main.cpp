@@ -3,6 +3,10 @@
 
 int main(int argc, char* argv[]) {
     HiddenEngine gameEngine;
-    printf("hiya:");
-    return 0;
+    gameEngine.GetInfo();
+    if (gameEngine.Initialize()) {
+        gameEngine.Run();
+        gameEngine.Shutdown();
+    }
+   
 }

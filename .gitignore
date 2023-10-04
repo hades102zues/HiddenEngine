@@ -10,12 +10,16 @@
 .history/
 
 # Built Visual Studio Code Extensions
-*.vsix
+*.vsix  
 
 *.DS_Store
 
+
+
+hidden.*
 game.*
 !game.cpp
 !game.h
 
 build/
+Makefile
