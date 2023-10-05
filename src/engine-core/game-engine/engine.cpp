@@ -8,6 +8,7 @@ HiddenEngine::HiddenEngine() {
 
 int HiddenEngine::Initialize() {
 
+
     // *************
     // **** Initialize Logger
     Logger::Init();
@@ -17,7 +18,7 @@ int HiddenEngine::Initialize() {
     // **** Initialize SDL2
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        std::cout <<  "Error creating window: " << SDL_GetError() << std::endl;
+        HIDDEN_ERROR("Error initializing SDL {}", SDL_GetError());
         Shutdown();
         return 0;
     }
@@ -37,7 +38,7 @@ int HiddenEngine::Initialize() {
                             , 0
             );
     if (!m_window) {
-        std::cout << "Error creating SDL window."  << std::endl;
+        HIDDEN_ERROR("Error creating SDL window");
         Shutdown();
         return 0;
     }
@@ -47,12 +48,15 @@ int HiddenEngine::Initialize() {
 
 
     m_isRunning = true;
+    HIDDEN_INFO("Engine Initialization Completed");
     return 1;
     
 
 }
 
 void HiddenEngine::Run() {
+
+    HIDDEN_INFO("Engine is running");
     while (m_isRunning) {
         HandleInput();
         Update();
@@ -83,20 +87,21 @@ void HiddenEngine::Render() {
 }
 void HiddenEngine::GetInfo() {
 #ifdef HIDDEN_CONFIG_DEBUG
-    std::cout << "Configuration : DEBUG " << std::endl;
+    HIDDEN_INFO("Configuration : DEBUG" );
 #endif
 #ifdef HIDDEN_CONFIG_RELEASE
-    std::cout << "Configuration : RELEASE" << std::endl;
+    HIDDEN_INFO("Configuration : Release" );
 #endif
 #ifdef HIDDEN_PLATFORM_MAC
-    std::cout << "Platform : MACOSX" << std::endl;
+    HIDDEN_INFO("Platform : MACOSX");
 #endif
 #ifdef HIDDEN_PLATFORM_WINDOWS
-    std::cout << "Platform : WINDOWS" << std::endl;
+     HIDDEN_INFO("Platform : WINDOWS");
 #endif
 }
 
 void HiddenEngine::Shutdown() {
+    HIDDEN_INFO("Engine shutting down....");
 
     Logger::Shutdown();
 

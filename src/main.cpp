@@ -3,10 +3,13 @@
 
 int main(int argc, char* argv[]) {
     HiddenEngine gameEngine;
+    
+    if(!gameEngine.Initialize()) 
+        return 0;
+
     gameEngine.GetInfo();
-    if (gameEngine.Initialize()) {
-        gameEngine.Run();
-        gameEngine.Shutdown();
-    }
-   
+    gameEngine.Run();
+    gameEngine.Shutdown();
+    
+   return 0;
 }

@@ -22,7 +22,7 @@ externalDeps["SpdLog"] = "third-party/spdlog"
 -- The include must NEVER be placed within the body of another project otherwise subsequent attributions
 -- will instead be applied under the include's project domain
 
-
+-- build glad 
 include(externalDeps.Glad)
 
 
@@ -56,7 +56,7 @@ project "HiddenEngine"
 --- must be specified before files{}
 
 
-    externalincludedirs {     -- Allows user to add paths to compiler’s system directory list, typically done via  -I or -isystem compiler flag. 
+    includedirs {     -- Allows user to add paths to compiler’s system directory list, typically done via  -I or -isystem compiler flag. 
         "%{externalDeps.Glad}/include"
         ,"%{externalDeps.Glm}/include"
         ,"%{externalDeps.Sdl2}/include"

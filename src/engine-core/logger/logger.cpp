@@ -15,16 +15,16 @@ void Logger::Init() {
     spdlog::sinks_init_list sinks = {consoleSink};
 
     // make the logger
-    auto logger = std::make_shared<spdlog::logger>("hidden_logger", sinks.begin(), sinks.end());
+    m_engineLogger = std::make_shared<spdlog::logger>("hidden_logger", sinks.begin(), sinks.end());
 
     // set the lowest that the logger will generate for. 
     // this can be futhered filtered on the sink level
-    logger->set_level(spdlog::level::trace);
+    m_engineLogger->set_level(spdlog::level::trace);
 
     // set the level at messages should be immediately forwarded to sinks
-    logger->flush_on(spdlog::level::trace);
+    m_engineLogger->flush_on(spdlog::level::trace);
 
-    spdlog::register_logger(logger);
+    spdlog::register_logger(m_engineLogger);
 
 
     /*
