@@ -1,10 +1,6 @@
-# Ignore all files under .vscode, with some exceptions
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+
+# Ignore vscode things
+.vscode/
 
 # Local History for Visual Studio Code
 .history/
@@ -14,12 +10,12 @@
 
 *.DS_Store
 
-
-
+# Executable 
 hidden.*
 game.*
 !game.cpp
 !game.h
 
+# 
 build/
 Makefile
