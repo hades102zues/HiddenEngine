@@ -5,8 +5,6 @@ workspace "Hidden"
 
 
 
---- **************************************
---- *** GENERATE EXTERNAL LIB FILES ***
 
 -- Define a table to hold the third-party dependencies directories
 externalDeps = {}
@@ -15,6 +13,9 @@ externalDeps["Glm"] = "third-party/glm"
 externalDeps["Sdl2"] = "third-party/mac_sdl2_core"
 externalDeps["SpdLog"] = "third-party/spdlog"
 
+
+--- **************************************
+--- *** GENERATE EXTERNAL LIB FILES ***
 
 
 -- include(): Control moves to the directory passed in the argument and executes the premake5.lua.
@@ -44,8 +45,8 @@ project "HiddenEngine"
     postbuildcommands {
       -- "rm -rf %{cfg.buildtarget.directory}/build"
       --  ,"rm -f %{cfg.buildtarget.directory}/Makefile"
-        "clear"
-        ,"%{cfg.buildtarget.directory}/%{cfg.buildtarget.name}"
+       -- "clear"
+        "%{cfg.buildtarget.directory}/%{cfg.buildtarget.name}"
         
     }
 

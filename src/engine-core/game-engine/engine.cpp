@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "../logger/logger.h"
 #include <iostream>
 
 HiddenEngine::HiddenEngine() {
@@ -8,10 +9,15 @@ HiddenEngine::HiddenEngine() {
 int HiddenEngine::Initialize() {
 
     // *************
+    // **** Initialize Logger
+    Logger::Init();
+
+
+    // *************
     // **** Initialize SDL2
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        std::cout << "SDL init error" << std::endl;
+        std::cout <<  "Error creating window: " << SDL_GetError() << std::endl;
         Shutdown();
         return 0;
     }
@@ -91,6 +97,9 @@ void HiddenEngine::GetInfo() {
 }
 
 void HiddenEngine::Shutdown() {
+
+    Logger::Shutdown();
+
     SDL_Quit();
 }
 HiddenEngine::~HiddenEngine() {};
