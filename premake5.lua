@@ -29,7 +29,7 @@ include(externalDeps.Glad)
 
 
 project "HiddenEngine"
-    kind "ConsoleApp" --end product is an executable
+    kind "ConsoleApp" -- set what the binary end product would be. in this case an executable
     location "build" -- The user defined location for all project files, unless specifically overrided to be elsewhere.
     language "C++"
     cppdialect "C++17"
@@ -56,7 +56,7 @@ project "HiddenEngine"
 --- must be specified before files{}
 
 
-    includedirs {     -- Allows user to add paths to compiler’s system directory list, typically done via  -I or -isystem compiler flag. 
+    externalincludedirs {     -- Allows user to add paths to compiler’s system directory list, typically done via  -I or -isystem compiler flag. 
         "%{externalDeps.Glad}/include"
         ,"%{externalDeps.Glm}/include"
         ,"%{externalDeps.Sdl2}/include"
@@ -69,8 +69,12 @@ project "HiddenEngine"
 
     files {
         "src/**.cpp"
+        --,"src/engine-core/window/*.cpp"
     }
 
+    defines {
+        "GLFW_INCLUDE_NONE" -- Tell Glad to not include GLFW
+    }
 
 
 --- **************************************
@@ -98,13 +102,14 @@ project "HiddenEngine"
         runtime "Debug"
         
     filter {"system:*", "configurations:Release"}
-        defines "HIDDEN_CONFIG_DEBUG"
+        defines "HIDDEN_CONFIG_RELEASE"
         symbols "off" --debug info / -g
         runtime "Release"
         optimize "on"
 
     filter {"system:macosx", "configurations:*"}
         defines "HIDDEN_PLATFORM_MAC"
+        systemversion "12.0" -- set lowest os compatibility
 
     filter {"system:windows", "configurations:*"}
         defines "HIDDEN_PLATFORM_WINDOWS"

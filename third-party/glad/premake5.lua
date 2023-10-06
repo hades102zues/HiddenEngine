@@ -11,7 +11,7 @@ project "glad"
         ,"src/**.c"
     }
 
-    includedirs {
+    externalincludedirs {
         "include"
     }
 

@@ -1,6 +1,7 @@
 
 # Ignore vscode things
 .vscode/
+!.vscode/launch.json
 
 # Local History for Visual Studio Code
 .history/
@@ -19,3 +20,9 @@ game.*
 # 
 build/
 Makefile
+*.xcodeproj/
+*.xcworkspace/
+*.pbxproj
+*.xcworkspacedata
+xcuserdata/
+xcshareddata/

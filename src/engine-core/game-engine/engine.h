@@ -1,7 +1,8 @@
 #pragma once
-#include <glad/glad.h>
-#include <SDL2/SDL.h> 
 
+#include <SDL2/SDL.h> 
+#include "../window/window.h"
+#include <memory>
 
 
 
@@ -15,12 +16,11 @@ class HiddenEngine {
         void Run();
         void Shutdown();
     private:
-        int m_windowHeight;
-        int m_windowWidth;
-        SDL_Window* m_window;
         bool m_isRunning;
+        std::shared_ptr<SDLWindow> m_engineWindow;
 
+        void Render();
         void HandleInput();
         void Update();
-        void Render();
+
 };
