@@ -79,7 +79,6 @@ void HiddenEngine::Shutdown() {
     HIDDEN_INFO("Engine shutting down....");
 
     Logger::Shutdown();
-
-    SDL_Quit();
+    m_engineWindow->Shutdown();
 }
 HiddenEngine::~HiddenEngine() {};

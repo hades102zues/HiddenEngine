@@ -113,5 +113,5 @@ void SDLWindow::Render() {
 }
 
 void SDLWindow::Shutdown() {
-    
+    SDL_Quit();
 }
