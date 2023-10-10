@@ -59,10 +59,18 @@ void HiddenEngine::Update() {
 }
 
 void HiddenEngine::Render() {
-    mEngineWindow->GlClear();
+//make a basic mesh and shader => RenderCommand => Renderer
 
-    
-    mEngineWindow->Render();
+
+
+
+// Clear Window
+mEngineRenderer->GlClear();
+
+// Issue draw calls. I.e Flush the renderer
+// Swap buffers
+mEngineWindow->SwapBuffers();
+
 }
 
 

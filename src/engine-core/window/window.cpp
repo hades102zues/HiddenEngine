@@ -94,7 +94,7 @@ void SDLWindow::GlClear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
 }
 
-void SDLWindow::Render() {
+void SDLWindow::SwapBuffers() {
 
     SDL_GL_SwapWindow(m_window);
 }

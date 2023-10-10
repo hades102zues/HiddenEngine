@@ -46,8 +46,8 @@ project "HiddenEngine"
       -- 
       --  ,"rm -f %{cfg.buildtarget.directory}/Makefile"
        -- "clear"
-       "rm -rf %{cfg.buildtarget.directory}/build"
-        ,"%{cfg.buildtarget.directory}/%{cfg.buildtarget.name}"
+       --"rm -rf %{cfg.buildtarget.directory}/build",
+     "%{cfg.buildtarget.directory}/%{cfg.buildtarget.name}"
         
         
     }

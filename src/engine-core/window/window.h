@@ -12,7 +12,8 @@ class SDLWindow {
         SDL_Window* Get();
         int Init();
         void HandleInputs(bool& isRunning);
-        void Render();
+        void SwapBuffers();
         void Shutdown();
         void GlClear();
+
 };
