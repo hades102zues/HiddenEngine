@@ -5,13 +5,13 @@
  * Houses issued graphics api calls. 
  * The Command will be Executed by the renderer.
 */
-class RenderCommand{
+
+
+class RenderCommand {
 public:
     virtual void Execute() = 0;
-    virtual ~RenderCommand() = default;
+    virtual ~RenderCommand() {}
 };
-
-
 
 class Mesh;
 class Shader;
@@ -25,5 +25,5 @@ private:
 public:
     RenderMesh(std::weak_ptr<Mesh> mesh, std::weak_ptr<Shader> shader);
     ~RenderMesh();
-    virtual void Execute();
+    virtual void Execute() override;
 };

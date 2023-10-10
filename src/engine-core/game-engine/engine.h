@@ -26,5 +26,9 @@ class HiddenEngine {
         void Update();
 
         // TODO: WRITE THE SINGLETON BEHAVIOUR
+        // static std::unique_ptr<HiddenEngine> sEngineInstance;
+        // static std::unique_ptr<HiddenEngine>& GetEngine();
+        
+
 
 };

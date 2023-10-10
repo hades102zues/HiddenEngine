@@ -8,6 +8,7 @@ SDL_Window* SDLWindow::Get() {
 }
 
 int SDLWindow::Init() {
+    HIDDEN_INFO("Initializing SDL_Window");
 
     // *************
     // **** Initialize SDL Window
@@ -70,7 +71,9 @@ int SDLWindow::Init() {
 
     // *************
     // **** Closeout
+    HIDDEN_INFO("Initialized SDL_Window");
     return 1;
+    
 
 }
 

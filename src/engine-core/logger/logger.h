@@ -29,12 +29,12 @@ class Logger {
 // ... & __VA_ARGS__ are a way of accepting an unlimited number of arguements
 #ifdef HIDDEN_CONFIG_DEBUG
     
-    #define HIDDEN_TRACE(...)  Logger::Get()->trace(__VA_ARGS__)
-    #define HIDDEN_DEBUG(...)  Logger::Get()->debug(__VA_ARGS__)
-    #define HIDDEN_INFO(...)   Logger::Get()->info(__VA_ARGS__)
-    #define HIDDEN_WARN(...)   Logger::Get()->warn(__VA_ARGS__)
-    #define HIDDEN_ERROR(...)  Logger::Get()->error(__VA_ARGS__)
-    #define HIDDEN_FATAL(...)  Logger::Get()->critical(__VA_ARGS__)
+    #define HIDDEN_TRACE(...)  if(Logger::Get()) { Logger::Get()->trace(__VA_ARGS__);}
+    #define HIDDEN_DEBUG(...)  if(Logger::Get()) { Logger::Get()->debug(__VA_ARGS__);}
+    #define HIDDEN_INFO(...)   if(Logger::Get()) { Logger::Get()->info(__VA_ARGS__);}
+    #define HIDDEN_WARN(...)   if(Logger::Get()) { Logger::Get()->warn(__VA_ARGS__);}
+    #define HIDDEN_ERROR(...)  if(Logger::Get()) { Logger::Get()->error(__VA_ARGS__);}
+    #define HIDDEN_FATAL(...)  if(Logger::Get()) { Logger::Get()->critical(__VA_ARGS__);}
    
     #define HIDDEN_ASSERT(assert_condition, response_msg) if ((assert_condition)) {} else { HIDDEN_FATAL("Asserted {} :-  \n\tin file: {} \n\ton line: {} \n\thint: {} ", #assert_condition, __FILE__, __LINE__, response_msg);  }
 

@@ -19,7 +19,7 @@ void RenderMesh::Execute() {
 
 
     if (!(mesh && shader)) {
-        HIDDEN_WARN("Attempted to issue render mesh on absent data");
+        HIDDEN_WARN("Attempted to render mesh on absent data");
         return;
     }
 
