@@ -46,6 +46,7 @@ class Logger {
     #define HIDDEN_WARN(...)   (void)0;
     #define HIDDEN_ERROR(...)  (void)0;
     #define HIDDEN_FATAL(...)  (void)0;
+    #define HIDDEN_ASSERT(...) (void)0;
     
 
 #endif

@@ -64,21 +64,7 @@ int SDLWindow::Init() {
         return 0;
     }
 
-    
-    
-    // *************
-    // **** OPENGL Drawing Attributes
-    
 
-    // Set method for depth testing of vertices/fragments
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
-    // If there's transparency(Alpha) then render accordingly
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
 
 
 
@@ -104,11 +90,12 @@ void SDLWindow::HandleInputs(bool& m_isRunning) {
     }
 }
 
-void SDLWindow::Clear() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void SDLWindow::GlClear() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
 }
 
 void SDLWindow::Render() {
+
     SDL_GL_SwapWindow(m_window);
 }
 

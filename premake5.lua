@@ -43,10 +43,12 @@ project "HiddenEngine"
     }
     
     postbuildcommands {
-      -- "rm -rf %{cfg.buildtarget.directory}/build"
+      -- 
       --  ,"rm -f %{cfg.buildtarget.directory}/Makefile"
        -- "clear"
-        "%{cfg.buildtarget.directory}/%{cfg.buildtarget.name}"
+       "rm -rf %{cfg.buildtarget.directory}/build"
+        ,"%{cfg.buildtarget.directory}/%{cfg.buildtarget.name}"
+        
         
     }
 

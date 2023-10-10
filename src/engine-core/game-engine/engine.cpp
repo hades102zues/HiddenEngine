@@ -3,7 +3,7 @@
 #include <iostream>
 
 HiddenEngine::HiddenEngine() {
-    m_isRunning = false;
+    mIsRunning = false;
 }
 
 int HiddenEngine::Initialize() {
@@ -16,17 +16,22 @@ int HiddenEngine::Initialize() {
 
     // *************
     // **** Initialize SDL Window
-    m_engineWindow = std::make_shared<SDLWindow>();
-    if(!m_engineWindow->Init()) {
+    mEngineWindow = std::make_unique<SDLWindow>();
+    if(!mEngineWindow->Init()) {
         Shutdown();
         return 0;
     }
+
+    // *************
+    // **** Initialize Renderer
+    mEngineRenderer = std::make_unique<Renderer>();
+    mEngineRenderer->Init();
 
 
     // *************
     // **** Closeout
 
-    m_isRunning = true;
+    mIsRunning = true;
     HIDDEN_INFO("Engine Initialization Completed");
     return 1;
     
@@ -36,7 +41,7 @@ int HiddenEngine::Initialize() {
 void HiddenEngine::Run() {
 
     HIDDEN_INFO("Engine is running");
-    while (m_isRunning) {
+    while (mIsRunning) {
         HandleInput();
         Update();
         Render();
@@ -46,7 +51,7 @@ void HiddenEngine::Run() {
 
 void HiddenEngine::HandleInput() {
     // i don't like the setup of this function
-    m_engineWindow->HandleInputs(m_isRunning);
+    mEngineWindow->HandleInputs(mIsRunning);
 }
 
 void HiddenEngine::Update() {
@@ -54,8 +59,10 @@ void HiddenEngine::Update() {
 }
 
 void HiddenEngine::Render() {
-    m_engineWindow->Clear();
-    m_engineWindow->Render();
+    mEngineWindow->GlClear();
+
+    
+    mEngineWindow->Render();
 }
 
 
@@ -78,7 +85,8 @@ void HiddenEngine::GetInfo() {
 void HiddenEngine::Shutdown() {
     HIDDEN_INFO("Engine shutting down....");
 
+    mEngineWindow->Shutdown();
     Logger::Shutdown();
-    m_engineWindow->Shutdown();
 }
+
 HiddenEngine::~HiddenEngine() {};

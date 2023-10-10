@@ -12,7 +12,7 @@ class SDLWindow {
         SDL_Window* Get();
         int Init();
         void HandleInputs(bool& isRunning);
-        void Clear();
         void Render();
         void Shutdown();
+        void GlClear();
 };
