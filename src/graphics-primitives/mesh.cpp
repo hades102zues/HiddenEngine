@@ -29,12 +29,10 @@ void Mesh::GenMesh() {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-    // // vertex normals
-    // glEnableVertexAttribArray(1);	
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-    // // vertex texture coords
-    // glEnableVertexAttribArray(2);	
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+    // texture coordinates
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextCoords));
+
 
     glBindVertexArray(0);
 }
@@ -43,14 +41,14 @@ void Mesh::Bind() {
 
     glBindVertexArray(m_vao);
     glEnableVertexAttribArray(0);
-    // glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(1);
     // glEnableVertexAttribArray(2);
 
 }
 
 void Mesh::UnBind() {
     glDisableVertexAttribArray(0);
-    // glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(1);
     // glDisableVertexAttribArray(2);
     glBindVertexArray(0);
 }

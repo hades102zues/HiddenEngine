@@ -5,6 +5,7 @@
 
 #include "../../graphics-primitives/mesh.h"
 #include "../../graphics-primitives/shader.h"
+#include "../../graphics-primitives/texture.h"
 #include "../../graphics-primitives/render_command.h"
 
 // std::unique_ptr<HiddenEngine> HiddenEngine::sEngineInstance;
@@ -35,6 +36,7 @@ int HiddenEngine::Initialize() {
     Logger::Init();
     HIDDEN_INFO("Initializing Engine...");
 
+
     // *************
     // **** Initialize SDL Window
     mEngineWindow = std::make_unique<SDLWindow>();
@@ -61,51 +63,102 @@ int HiddenEngine::Initialize() {
 
 void HiddenEngine::Run() {
 
-struct Vertex vert1 = {glm::vec3(-0.5f, 0.0f, 0.0f)};
-struct Vertex vert2 = {glm::vec3(0.5f, 0.0f, 0.0f)};
-struct Vertex vert3 = {glm::vec3(0.0f, 0.5f, 0.0f)};
+struct Vertex vert1 = {glm::vec3(0.5f, 0.5f, 0.0f), glm::vec2(1.0f, 1.0f)};
+struct Vertex vert2 = {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 0.0f)};
+struct Vertex vert3 = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f)};
+struct Vertex vert4 = {glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0.0f, 1.0f)};
+std::vector<Vertex> vertices{vert1, vert2, vert3, vert4};
 
-std::vector<Vertex> vertices{vert1, vert2, vert3};
-std::vector<unsigned int> indices{0,1,2};
+
+// Every vertex attribute is parsed to some location on a VAO
+// But each location in the VAO is an array that is populated upon ingestion.
+// For example, all the data associated with the very first vertex ingested would be found at index 0 of every location array.
+// The API allows us to specifically target indices so that we can reuse vertex data.
+std::vector<unsigned int> indices{
+                             0, 1, 3,      // vertices of the first triangle
+                             1, 2, 3       // vertices of the second triangle
+                            };
 std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices);
 
 
+
+
+
+
 std::string vertexSrc = R"(
-    #version 330 core
+    #version 410 core
+
     layout(location = 0) in vec3 aPosition;
+    layout(location = 1) in vec2 aTextureCoords;
 
     out vec3 v_Position;
+    out vec2 v_UVs;
+    
 
     void main() {
         v_Position = aPosition;
+        v_UVs = aTextureCoords;
         gl_Position = vec4(aPosition, 1.0);
 
     }
 )";
 
 std::string fragmentSrc = R"(
-    #version 330 core
+    #version 410 core
+
     in vec3 v_Position;
+    in vec2 v_UVs;
+    uniform sampler2D textureSampler;
+
     out vec4 f_Color;
 
     void main() {
-        f_Color = vec4(v_Position, 1.0);
+        f_Color = texture(textureSampler, v_UVs);
     }
 
 )";
-
 std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
 
 
 
+
+
+
+std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container.jpg", "assets/textures/container.jpg");
+
+   
+    int numberOfFramesPerSecond = 60;
+    float timePerFrame = 1000.0f / numberOfFramesPerSecond; // in milliseconds
+    float currentTime = SDL_GetTicks(); // in miliseonds
+    float prevTime = currentTime; // in miliseconds
+    float timeElapsed; // in miliseconds
+    float dt; // in seconds
+
+
     HIDDEN_INFO("Engine is running");
     while (mIsRunning) {
+
+        // Input Process
         HandleInput();
+
+        // Update game state
         Update();
 
-        auto renderCommand = std::make_unique<RenderMesh>(mesh, shader);
+        auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, text1, shader);
         mEngineRenderer->Submit(std::move(renderCommand));
+
+        // Render to Screen
         Render();
+
+        // Compute dt & waiting
+        currentTime = SDL_GetTicks();
+        timeElapsed = currentTime - prevTime;
+        dt = timeElapsed / 1000.f;
+        prevTime = currentTime;
+
+        if (timeElapsed < timePerFrame) {
+            SDL_Delay(timePerFrame - timeElapsed);
+        }
   
     }
 }
@@ -121,13 +174,14 @@ void HiddenEngine::Update() {
 
 void HiddenEngine::Render() {
 
-// Clear Window
-mEngineRenderer->GlClear();
+    // Clear Window
+    mEngineWindow->GlClear();
 
-// Issue draw calls
-mEngineRenderer->Flush();
-// Swap buffers
-mEngineWindow->SwapBuffers();
+    // Issue draw calls
+    mEngineRenderer->Flush();
+
+    // Swap buffers
+    mEngineWindow->SwapBuffers();
 
 }
 

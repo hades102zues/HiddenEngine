@@ -27,7 +27,7 @@ class Logger {
 
 // Set up preprocessor macros as guards to accessing the logging functions
 // ... & __VA_ARGS__ are a way of accepting an unlimited number of arguements
-#ifdef HIDDEN_CONFIG_DEBUG
+#ifndef HIDDEN_CONFIG_RELEASE
     
     #define HIDDEN_TRACE(...)  if(Logger::Get()) { Logger::Get()->trace(__VA_ARGS__);}
     #define HIDDEN_DEBUG(...)  if(Logger::Get()) { Logger::Get()->debug(__VA_ARGS__);}
