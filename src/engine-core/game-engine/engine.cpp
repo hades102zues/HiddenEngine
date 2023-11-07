@@ -63,11 +63,49 @@ int HiddenEngine::Initialize() {
 
 void HiddenEngine::Run() {
 
-struct Vertex vert1 = {glm::vec3(0.5f, 0.5f, 0.0f), glm::vec2(1.0f, 1.0f)};
-struct Vertex vert2 = {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 0.0f)};
-struct Vertex vert3 = {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f)};
-struct Vertex vert4 = {glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0.0f, 1.0f)};
-std::vector<Vertex> vertices{vert1, vert2, vert3, vert4};
+std::vector<Vertex> vertices{
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
+
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)}
+};
 
 
 // Every vertex attribute is parsed to some location on a VAO
@@ -78,7 +116,7 @@ std::vector<unsigned int> indices{
                              0, 1, 3,      // vertices of the first triangle
                              1, 2, 3       // vertices of the second triangle
                             };
-std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices);
+std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, GlDraw::MESH_ARRAY_DRAW);
 
 
 
@@ -127,8 +165,8 @@ std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc
 std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container.jpg", "assets/textures/container.jpg");
 
    
-    int numberOfFramesPerSecond = 60;
-    float timePerFrame = 1000.0f / numberOfFramesPerSecond; // in milliseconds
+    int fpsCap = 60;
+    float timePerFrame = 1000.0f / fpsCap; // in milliseconds
     float currentTime = SDL_GetTicks(); // in miliseonds
     float prevTime = currentTime; // in miliseconds
     float timeElapsed; // in miliseconds

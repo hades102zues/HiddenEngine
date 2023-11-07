@@ -14,6 +14,86 @@ std::vector<unsigned int> indices{
 };
 
 // Basic Cube
+std::vector<Vertex> vertices{
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
+
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)}
+};
+
+
+
+// Texture Shader
+std::string vertexSrc = R"(
+    #version 410 core
+
+    layout(location = 0) in vec3 aPosition;
+    layout(location = 1) in vec2 aTextureCoords;
+
+    out vec3 v_Position;
+    out vec2 v_UVs;
+    
+
+    void main() {
+        v_Position = aPosition;
+        v_UVs = aTextureCoords;
+        gl_Position = vec4(aPosition, 1.0);
+
+    }
+)";
+
+std::string fragmentSrc = R"(
+    #version 410 core
+
+    in vec3 v_Position;
+    in vec2 v_UVs;
+    uniform sampler2D textureSampler;
+
+    out vec4 f_Color;
+
+    void main() {
+        f_Color = texture(textureSampler, v_UVs);
+    }
+
+)";
+
 
 // Basic Shader
 

@@ -1,4 +1,4 @@
-{ // configs for lldb extension
+{ // configs for lldb debug extension
     "version": "0.2.0",
     "configurations": [{
         "name" : "(lldb) Debugging",

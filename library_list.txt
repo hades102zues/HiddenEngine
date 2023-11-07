@@ -1,3 +1,5 @@
+Graphics API - OpenGL 4.1
+Logger - gabime/spdlog
+Math - g-truc/glm
+Image Loading - stb/stb_image.h
 Windows & Input - SDL2
-Graphics API - OpenGL 3.3
-Logger - spdlog

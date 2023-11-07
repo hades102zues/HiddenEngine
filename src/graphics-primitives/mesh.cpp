@@ -1,9 +1,10 @@
 #include "mesh.h"
 #include <glad/glad.h>
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, GlDraw type) {
     m_vertices = vertices;
     m_indices = indices;
+    mDrawType = type;
     GenMesh();
 
 }
@@ -57,6 +58,19 @@ void Mesh::IndexDraw() {
     glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_indices.size()), GL_UNSIGNED_INT, 0);
 }
 
+void Mesh::ArrayDraw() {
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<unsigned int>(m_vertices.size()));
+}
+
+void Mesh::Draw() {
+    if (mDrawType == GlDraw::MESH_INDEX_DRAW) {
+        IndexDraw();
+    }
+
+    if (mDrawType == GlDraw::MESH_ARRAY_DRAW) {
+        ArrayDraw();
+    }
+}
 Mesh::~Mesh() {
     glDeleteBuffers(1, &m_ebo);
     glDeleteBuffers(1, &m_vbo);

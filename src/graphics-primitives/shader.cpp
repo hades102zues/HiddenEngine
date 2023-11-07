@@ -1,6 +1,8 @@
 #include "shader.h"
 #include <glad/glad.h>
 #include "../engine-core/logger/logger.h"
+#include "glError_checker.h"
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const std::string& vertex, const std::string& fragment) {
     mProgramId = glCreateProgram();
@@ -77,7 +79,7 @@ void Shader::UnBind() {
     
 }
 
-int Shader::GetUniformLocation(const std::string& name) {
+GLint Shader::GetUniformLocation(const std::string& name) {
     auto it = mUniforms.find(name);
 
     // if the name is not in the list
@@ -88,6 +90,15 @@ int Shader::GetUniformLocation(const std::string& name) {
     return mUniforms[name];
 }
 
+void Shader::Set1Float(float value, const std::string& name) {
+    GLint id = GetUniformLocation(name);
+    glUniform1f(id, static_cast<GLfloat>(value)); 
+}
+
+void Shader::SetMat4(glm::mat4 matrix, const std::string& name) {
+    GLint id = GetUniformLocation(name);
+    glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(matrix)); 
+}
 Shader::~Shader() {
     UnBind();
     glDeleteProgram(mProgramId);

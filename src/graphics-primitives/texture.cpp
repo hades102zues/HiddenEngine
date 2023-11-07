@@ -67,7 +67,7 @@ void Texture::LoadTexture() {
 
 void Texture::Bind() {
     // Select texture unit on the GPU to temporarily hold your texture for sampling
-    // glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
 
     // Select an already forwarded texture to be assigned to currently active texture unit
     glBindTexture(GL_TEXTURE_2D, mTextureId);

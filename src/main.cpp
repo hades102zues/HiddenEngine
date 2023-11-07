@@ -4,8 +4,10 @@
 int main(int argc, char* argv[]) {
     HiddenEngine gameEngine;
     
-    if(!gameEngine.Initialize()) 
+    if(!gameEngine.Initialize()) {
+        printf("Engine failed to initialize");
         return 0;
+    }
 
     gameEngine.GetInfo();
     gameEngine.Run();

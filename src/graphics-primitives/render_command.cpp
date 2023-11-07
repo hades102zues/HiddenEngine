@@ -30,7 +30,7 @@ void RenderMesh::Execute() {
 
     shader->Bind();
     mesh->Bind();
-        mesh->IndexDraw();
+        mesh->Draw();
     mesh->UnBind();
     shader->UnBind();
     
@@ -67,7 +67,7 @@ void RenderTexturedMesh::Execute() {
     shader->Bind();
     mesh->Bind();
     texture->Bind();
-        mesh->IndexDraw();
+        mesh->Draw();
     texture->UnBind();
     mesh->UnBind();
     shader->UnBind();

@@ -9,6 +9,10 @@
  * 
  ***/
 
+enum class GlDraw {
+    MESH_INDEX_DRAW = 0,
+    MESH_ARRAY_DRAW
+};
 
 struct Vertex {
     glm::vec3 Position;
@@ -23,16 +27,19 @@ private:
     unsigned int m_vao, m_vbo, m_ebo;
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
+    GlDraw mDrawType;
 
     void GenMesh();
 
 public:
 
-    Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+    Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, GlDraw type);
     ~Mesh();    
     void Bind();
     void UnBind();
+    void Draw();
     void IndexDraw();
+    void ArrayDraw();
     
 
 };
