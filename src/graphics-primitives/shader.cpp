@@ -81,23 +81,41 @@ void Shader::UnBind() {
 
 GLint Shader::GetUniformLocation(const std::string& name) {
     auto it = mUniforms.find(name);
+    
 
     // if the name is not in the list
     if(it == mUniforms.end()) {
-        mUniforms[name] = glGetUniformLocation(mProgramId, name.c_str());
-    }
 
+        int location;
+        location = glGetUniformLocation(mProgramId, name.c_str());
+
+        if (!location) {
+            HIDDEN_ERROR("Uniform variable {} was not found", name.c_str());
+        } 
+        else {
+            mUniforms[name] = location;
+            HIDDEN_INFO("Uniform variable <{},{}> added", name.c_str(), std::to_string(location));
+        }
+
+        return location;
+    } 
+    
     return mUniforms[name];
+    
 }
 
 void Shader::Set1Float(float value, const std::string& name) {
     GLint id = GetUniformLocation(name);
-    glUniform1f(id, static_cast<GLfloat>(value)); 
+    Bind();
+        glUniform1f(id, static_cast<GLfloat>(value)); HIDDEN_GL_ERROR_CHECK();
+    UnBind();
 }
 
-void Shader::SetMat4(glm::mat4 matrix, const std::string& name) {
+void Shader::SetMat4(const glm::mat4& matrix, const std::string& name) {
     GLint id = GetUniformLocation(name);
-    glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(matrix)); 
+    Bind();
+        glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(matrix)); HIDDEN_GL_ERROR_CHECK();
+    UnBind();
 }
 
 Shader::~Shader() {

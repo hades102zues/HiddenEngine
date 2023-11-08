@@ -17,7 +17,7 @@ public:
     void UnBind();
     GLint GetUniformLocation(const std::string& name);
     void Set1Float(float value, const std::string& name);
-    void SetMat4(glm::mat4 matrix, const std::string& name);
+    void SetMat4(const glm::mat4& matrix, const std::string& name);
 
 
     // uniform functions to come

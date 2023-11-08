@@ -8,6 +8,11 @@
 #include "../../graphics-primitives/texture.h"
 #include "../../graphics-primitives/render_command.h"
 
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // std::unique_ptr<HiddenEngine> HiddenEngine::sEngineInstance;
 // std::unique_ptr<HiddenEngine>& HiddenEngine::GetEngine() {
 
@@ -63,6 +68,9 @@ int HiddenEngine::Initialize() {
 
 void HiddenEngine::Run() {
 
+    
+// ******
+// **** TEST CODE
 std::vector<Vertex> vertices{
         Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
         Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 0.0f)},
@@ -140,7 +148,7 @@ std::string vertexSrc = R"(
     void main() {
         v_Position = aPosition;
         v_UVs = aTextureCoords;
-        gl_Position = vec4(aPosition, 1.0);
+        gl_Position = projection * view * model * vec4(aPosition, 1.0);
 
     }
 )";
@@ -160,15 +168,16 @@ std::string fragmentSrc = R"(
 
 )";
 std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
-
-
-
-
-
-
 std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", "assets/textures/container.jpg");
 
-   
+
+
+
+
+
+
+
+
     int fpsCap = 60;
     float timePerFrame = 1000.0f / fpsCap; // in milliseconds
     float currentTime = SDL_GetTicks(); // in miliseonds
@@ -186,8 +195,30 @@ std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", "assets/
         // Update game state
         Update();
 
-        auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, text1, shader);
-        mEngineRenderer->Submit(std::move(renderCommand));
+
+// ******
+// **** TEST CODE
+
+glm::mat4 model = glm::mat4(1.0f);
+glm::mat4 view = glm::mat4(1.0f);
+glm::mat4 projection = glm::mat4(1.0f);
+
+
+
+model = glm::rotate(model, (float)(SDL_GetTicks() / 1000.f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+projection = glm::perspective(glm::radians(45.0f), (float)mEngineWindow->GetWidth() / (float)mEngineWindow->GetHeight(), 0.1f, 100.0f);
+
+shader->SetMat4(model, "model");
+shader->SetMat4(view, "view");
+shader->SetMat4(projection, "projection");
+auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, text1, shader);
+mEngineRenderer->Submit(std::move(renderCommand));
+
+
+
+
+
 
         // Render to Screen
         Render();

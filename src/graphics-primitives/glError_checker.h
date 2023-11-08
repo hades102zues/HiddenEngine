@@ -19,7 +19,7 @@ void GlErrorChecker(const char* filename, int lineNumber) {
         HIDDEN_ERROR("GlErrorChecker Triggered:- \n\t Error: {} \n\t File: {} \n\t Line: {}", error.c_str(), filename, std::to_string(lineNumber).c_str());
     }
 
-    HIDDEN_ASSERT(errorCode != GL_NO_ERROR, "GL Errors Occured.");
+    //HIDDEN_ASSERT(errorCode != GL_NO_ERROR, "GL Errors Occured.");
 }
 
 
