@@ -23,14 +23,14 @@ int SDLWindow::Init() {
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
 
-    int windowHeight = 600;
-    int windowWidth = 800;
+    mWindowHeight = 600;
+    mWindowWidth = 800;
     m_window = SDL_CreateWindow(
                             "Game"
                             , SDL_WINDOWPOS_CENTERED
                             , SDL_WINDOWPOS_CENTERED
-                            , windowWidth
-                            , windowHeight
+                            , mWindowWidth
+                            , mWindowHeight
                             , SDL_WINDOW_OPENGL
             );
 
@@ -100,6 +100,14 @@ void SDLWindow::GlClear() {
 void SDLWindow::SwapBuffers() {
 
     SDL_GL_SwapWindow(m_window);
+}
+
+int SDLWindow::GetHeight() {
+    return mWindowHeight;
+}
+
+int SDLWindow::GetWidth() {
+    return mWindowWidth;
 }
 
 void SDLWindow::Shutdown() {

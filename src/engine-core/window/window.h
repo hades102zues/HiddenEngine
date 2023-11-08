@@ -4,6 +4,8 @@
 class SDLWindow {
     private :
         SDL_Window* m_window = nullptr;
+        int mWindowHeight;
+        int mWindowWidth;
     public :
         
         SDLWindow() = default;
@@ -15,5 +17,7 @@ class SDLWindow {
         void SwapBuffers();
         void Shutdown();
         void GlClear();
+        int GetWidth();
+        int GetHeight();
 
 };

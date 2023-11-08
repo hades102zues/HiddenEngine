@@ -99,6 +99,7 @@ void Shader::SetMat4(glm::mat4 matrix, const std::string& name) {
     GLint id = GetUniformLocation(name);
     glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(matrix)); 
 }
+
 Shader::~Shader() {
     UnBind();
     glDeleteProgram(mProgramId);

@@ -30,6 +30,7 @@ void RenderMesh::Execute() {
 
     shader->Bind();
     mesh->Bind();
+    // set uniform matrices
         mesh->Draw();
     mesh->UnBind();
     shader->UnBind();
@@ -67,6 +68,7 @@ void RenderTexturedMesh::Execute() {
     shader->Bind();
     mesh->Bind();
     texture->Bind();
+    // set uniform matrices
         mesh->Draw();
     texture->UnBind();
     mesh->UnBind();

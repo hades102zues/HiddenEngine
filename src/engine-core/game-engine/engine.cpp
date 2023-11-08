@@ -129,6 +129,10 @@ std::string vertexSrc = R"(
     layout(location = 0) in vec3 aPosition;
     layout(location = 1) in vec2 aTextureCoords;
 
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+
     out vec3 v_Position;
     out vec2 v_UVs;
     
@@ -162,7 +166,7 @@ std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc
 
 
 
-std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container.jpg", "assets/textures/container.jpg");
+std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", "assets/textures/container.jpg");
 
    
     int fpsCap = 60;
