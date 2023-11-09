@@ -2,4 +2,10 @@ Graphics API - OpenGL 4.1
 Logger - gabime/spdlog
 Math - g-truc/glm
 Image Loading - stb/stb_image.h
-Windows & Input - SDL2
+Windows & Input - SDL2(native)
+Model Loading - assimp(native)
+        git clone <assimp_url.git>
+        cd assimp
+        cmake CMakeLists.txt -DBUILD_SHARED_LIBS=OFF
+        cmake --build .
+        The static library will be in the "lib" folder

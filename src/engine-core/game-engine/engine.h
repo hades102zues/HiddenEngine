@@ -16,14 +16,18 @@ class HiddenEngine {
         int Initialize();
         void Run();
         void Shutdown();
+
     private:
         bool mIsRunning;
         std::unique_ptr<SDLWindow> mEngineWindow;
         std::unique_ptr<Renderer> mEngineRenderer;
 
+
         void Render();
         void HandleInput();
         void Update();
+
+
 
         // TODO: WRITE THE SINGLETON BEHAVIOUR
         // static std::unique_ptr<HiddenEngine> sEngineInstance;

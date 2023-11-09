@@ -87,16 +87,17 @@ GLint Shader::GetUniformLocation(const std::string& name) {
     if(it == mUniforms.end()) {
 
         int location;
-        location = glGetUniformLocation(mProgramId, name.c_str());
+        Bind();
+            location = glGetUniformLocation(mProgramId, name.c_str());
 
-        if (!location) {
-            HIDDEN_ERROR("Uniform variable {} was not found", name.c_str());
-        } 
-        else {
-            mUniforms[name] = location;
-            HIDDEN_INFO("Uniform variable <{},{}> added", name.c_str(), std::to_string(location));
-        }
-
+            if (!location) {
+                HIDDEN_ERROR("Uniform variable {} was not found", name.c_str());
+            } 
+            else {
+                mUniforms[name] = location;
+                HIDDEN_INFO("Uniform variable <{},{}> added", name.c_str(), std::to_string(location));
+            }
+        UnBind();
         return location;
     } 
     

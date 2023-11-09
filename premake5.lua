@@ -13,6 +13,7 @@ externalDeps["Glm"] = "third-party/glm"
 externalDeps["Sdl2"] = "third-party/mac_sdl2_core"
 externalDeps["SpdLog"] = "third-party/spdlog"
 externalDeps["stb"] = "third-party/stb"
+externalDeps["assimp"] = "third-party/assimp"
 
 
 --- **************************************
@@ -65,6 +66,7 @@ project "HiddenEngine"
         ,"%{externalDeps.Sdl2}/include"
         ,"%{externalDeps.SpdLog}/include"
         ,"%{externalDeps.stb}/include"
+        ,"%{externalDeps.assimp}/include"
         
     }
 
@@ -87,6 +89,7 @@ project "HiddenEngine"
     libdirs {
         "%{externalDeps.Sdl2}/lib"
         ,"%{externalDeps.Glad}/build/lib"
+        ,"%{externalDeps.assimp}/lib"
     }
 
     links {
@@ -96,6 +99,7 @@ project "HiddenEngine"
         ,"IOKit.framework"
         ,"SDL2"
         ,"glad"
+        ,"assimp"
     }
 
 

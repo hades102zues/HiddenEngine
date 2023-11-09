@@ -3,17 +3,20 @@
 #include <stb/stb_image.h>
 #include <glad/glad.h>
 #include "../engine-core/logger/logger.h"
+#include "../common/path_dict.h"
 #include <filesystem>
 
 Texture::Texture() {
     HIDDEN_WARN("Call made to incorrect Texture constructor.");
+    mTextureName = "";
+    mTexturePath = "";
 }
 
 Texture::Texture(const char* name, const std::string& path) {
     mTextureName = name;
 
-    std::string project_root = "/Users/hiddenworld/Documents/code/game_engine/HiddenEngine/";
-    std::string finalPath = project_root + path;
+    //std::string project_root = "/Users/hiddenworld/Documents/code/game_engine/HiddenEngine/";
+    std::string finalPath = pathLibrary.ProjectRoot + path;
     mTexturePath = finalPath.c_str();
 
     LoadTexture();
