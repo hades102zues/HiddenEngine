@@ -1,12 +1,20 @@
 #include "mesh.h"
 #include <glad/glad.h>
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, GlDraw type) {
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, GlDraw type) {
     m_vertices = vertices;
     m_indices = indices;
     mDrawType = type;
     GenMesh();
 
+}
+
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned int>& mapRefIds,  GlDraw type) {
+    m_vertices = vertices;
+    m_indices = indices;
+    mDrawType = type;
+    mMapRefIds = mapRefIds;
+    GenMesh();
 }
 
 
@@ -23,16 +31,46 @@ void Mesh::GenMesh() {
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
 
-    // vertex position
+
+    // *************
+    // Storing Vertex Properites
+
+    // Each location in the AttribArray will be tasked with holding a particular property of the vertices
+    // And at every location will be an array 
+    
+    // Location 0 will hold vertex position (x,y,z)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-    // texture coordinates
+    // Location 1 will hold texture coordinates (u,v)
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextCoords));
+
+    // Location 2 will hold Normals (x,y,z)
+
+
+
+
+    // *************
+    // Storing Indices
+    
+    // Indices provide a method of reusing our stored vertex data.
+    // We mentioned that each location manages a specific vector property, in an array.
+    
+    // Then per our setup above, for example, we know that
+    //      attribArray[0].list[0] position of vertex1
+    //      [1][0] texture coordinates of vertex1
+    //      [2][0] normal of vertex1
+
+    // Clearly, we can reference vertex1 by refering to a specific index where each of its properties
+    // would have been stored.
+
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
+
+
 
 
     glBindVertexArray(0);
@@ -64,12 +102,23 @@ void Mesh::ArrayDraw() {
 
 void Mesh::Draw() {
     if (mDrawType == GlDraw::MESH_INDEX_DRAW) {
+        
+        // bind texture handles
         IndexDraw();
     }
 
     if (mDrawType == GlDraw::MESH_ARRAY_DRAW) {
+        // bind texture handles
         ArrayDraw();
     }
+}
+
+void Mesh::BindTextures() {
+    if (!mMapRefIds.size()) {
+        return;
+    }
+
+    // set the uniforms
 }
 Mesh::~Mesh() {
     glDeleteBuffers(1, &m_ebo);

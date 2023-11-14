@@ -13,6 +13,7 @@ public:
     void Init();
     void Flush();
     void Submit(std::unique_ptr<RenderCommand> command);
+    // void SubmitCommands(std::vector<RenderCommand> commands);
     void ClearQueue();
     void SetGlClear(float r, float g, float b, float a);
     void GlClear();

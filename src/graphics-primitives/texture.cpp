@@ -12,12 +12,10 @@ Texture::Texture() {
     mTexturePath = "";
 }
 
-Texture::Texture(const char* name, const std::string& path) {
+Texture::Texture(const char* name, const std::string& path, MapType type = MapType::DIFFUSE) {
     mTextureName = name;
-
-    //std::string project_root = "/Users/hiddenworld/Documents/code/game_engine/HiddenEngine/";
-    std::string finalPath = pathLibrary.ProjectRoot + path;
-    mTexturePath = finalPath.c_str();
+    mTexturePath = path.c_str();
+    mMapType = type;
 
     LoadTexture();
 }
@@ -65,7 +63,7 @@ void Texture::LoadTexture() {
     // GPU generates scaled down versions
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    HIDDEN_INFO("Pushed Texture: {}", mTextureName);
+    HIDDEN_INFO("Pushed Texture: <{}, {}>", mTextureName, mTextureId);
 }
 
 void Texture::Bind() {
@@ -80,7 +78,9 @@ void Texture::Bind() {
 
 
 }
-
+unsigned int Texture::GetTextureId() {
+    return mTextureId;
+}
 void Texture::UnBind() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }

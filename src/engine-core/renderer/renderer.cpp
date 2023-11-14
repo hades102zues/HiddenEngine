@@ -42,6 +42,10 @@ void Renderer::Submit(std::unique_ptr<RenderCommand> command) {
     
 }
 
+// void SubmitCommands(std::vector<RenderCommand> commands) {
+
+// }
+
 // 
 void Renderer::ClearQueue() {
     HIDDEN_ASSERT(mRenderComands.size() == 0, "Unflushed Render Commands in queue");

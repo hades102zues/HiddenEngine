@@ -17,7 +17,7 @@ enum class GlDraw {
 struct Vertex {
     glm::vec3 Position;
     glm::vec2 TextCoords;
-    //glm::vec3 Normal;
+    glm::vec3 Normal;
     
 };
 
@@ -27,19 +27,24 @@ private:
     unsigned int m_vao, m_vbo, m_ebo;
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
+    std::vector<unsigned int> mMapRefIds;
     GlDraw mDrawType;
 
+    
     void GenMesh();
+    void IndexDraw();
+    void ArrayDraw();
+    void BindTextures();
 
 public:
 
-    Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, GlDraw type);
+    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, GlDraw type);
+    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned int>& mapRefIds,  GlDraw type);
     ~Mesh();    
     void Bind();
     void UnBind();
     void Draw();
-    void IndexDraw();
-    void ArrayDraw();
+
     
 
 };

@@ -3,6 +3,8 @@
 #include <iostream>
 
 
+#include "../../common/path_dict.h"
+
 #include "../../graphics-primitives/mesh.h"
 #include "../../graphics-primitives/shader.h"
 #include "../../graphics-primitives/texture.h"
@@ -12,6 +14,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "../../graphics-primitives/model_loader.h"
 
 
 // std::unique_ptr<HiddenEngine> HiddenEngine::sEngineInstance;
@@ -73,47 +77,47 @@ void HiddenEngine::Run() {
 // ******
 // **** TEST CODE
 std::vector<Vertex> vertices{
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f)}
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)}
 };
 
 
@@ -169,12 +173,16 @@ std::string fragmentSrc = R"(
 
 )";
 std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
-std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", "assets/textures/container.jpg");
+
+std::string textureName = "textures/container.jpg";
+std::string fullPath = pathLibrary.AssetRoot+ textureName;
+std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", fullPath, MapType::DIFFUSE);
 
 
-
-
-
+std::string modelDirectory = "3d_models/nanosuit/";
+modelDirectory = pathLibrary.AssetRoot+ modelDirectory;
+ModelLoader loader;
+loader.LoadModel("nanosuit.obj", modelDirectory);
 
 
 

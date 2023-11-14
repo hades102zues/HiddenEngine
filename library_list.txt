@@ -6,6 +6,14 @@ Windows & Input - SDL2(native)
 Model Loading - assimp(native)
         git clone <assimp_url.git>
         cd assimp
-        cmake CMakeLists.txt -DBUILD_SHARED_LIBS=OFF
-        cmake --build .
-        The static library will be in the "lib" folder
+        1) You will need the dynamic library files. So: 
+                cmake CMakeLists.txt 
+                cmake --build .
+                grab all dynamic library files from /build
+        2) We will need the static files. So:
+                cmake CMakeLists.txt -DBUILD_SHARED_LIBS=OFF
+                cmake --build .
+                grab the static library file from /lib
+	
+
+
