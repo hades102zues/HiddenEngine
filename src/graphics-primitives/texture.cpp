@@ -66,9 +66,9 @@ void Texture::LoadTexture() {
     HIDDEN_INFO("Pushed Texture: <{}, {}>", mTextureName, mTextureId);
 }
 
-void Texture::Bind() {
+void Texture::Bind(int index = 0) {
     // Select texture unit on the GPU to temporarily hold your texture for sampling
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0 + index);
 
     // Select an already forwarded texture to be assigned to currently active texture unit
     glBindTexture(GL_TEXTURE_2D, mTextureId);
@@ -80,6 +80,10 @@ void Texture::Bind() {
 }
 unsigned int Texture::GetTextureId() {
     return mTextureId;
+}
+
+MapType Texture::GetTextureType() {
+    return mMapType;
 }
 void Texture::UnBind() {
     glBindTexture(GL_TEXTURE_2D, 0);

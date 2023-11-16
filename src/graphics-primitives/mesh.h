@@ -1,7 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <vector>
-
+#include <memory>
+#include "texture.h"
 /***
  * 
  * Holds vertex data associated with a graphical structure.
@@ -21,29 +22,30 @@ struct Vertex {
     
 };
 
+class Shader;
 
 class Mesh {
 private:
     unsigned int m_vao, m_vbo, m_ebo;
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
-    std::vector<unsigned int> mMapRefIds;
+    std::vector<std::weak_ptr<Texture>> mMapRefs;
     GlDraw mDrawType;
 
     
     void GenMesh();
     void IndexDraw();
     void ArrayDraw();
-    void BindTextures();
+    void BindTextures(const std::shared_ptr<Shader>& shader);
 
 public:
 
     Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, GlDraw type);
-    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned int>& mapRefIds,  GlDraw type);
+    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, std::vector<std::weak_ptr<Texture>> mapRefs,  GlDraw type);
     ~Mesh();    
     void Bind();
     void UnBind();
-    void Draw();
+    void Draw(const std::shared_ptr<Shader>& shader);
 
     
 

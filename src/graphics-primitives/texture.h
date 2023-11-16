@@ -18,8 +18,9 @@ public:
     Texture();
     Texture(const char* name, const std::string& path, MapType type);
     unsigned int GetTextureId();
+    MapType GetTextureType();
     void LoadTexture();
-    void Bind();
+    void Bind(int index);
     void UnBind();
     ~Texture();
 };

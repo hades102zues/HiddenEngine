@@ -166,7 +166,7 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     // Here we expect all models to come with textures and neglect code to grab colors
     // We also expect all textures to be held within the same directory as .obj file and the .mtl file should be modified to specify this as well.
     
-    std::vector<unsigned int> inMaps;
+    std::vector<std::weak_ptr<Texture>>  inMaps;
     // check if materials exist
     if (mesh->mMaterialIndex >= 0) {
 
@@ -174,11 +174,11 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex]; 
 
         // load the diffuse map
-        std::vector<unsigned int> diffuseMaps = LoadMaps(material, aiTextureType_DIFFUSE, MapType::DIFFUSE);
+        std::vector<std::weak_ptr<Texture>>  diffuseMaps = LoadMaps(material, aiTextureType_DIFFUSE, MapType::DIFFUSE);
         inMaps.insert(inMaps.end(), diffuseMaps.begin(), diffuseMaps.end() );
 
         //  load the specular map
-        std::vector<unsigned int> specularMaps = LoadMaps(material, aiTextureType_SPECULAR, MapType::SPECULAR);
+        std::vector<std::weak_ptr<Texture>>  specularMaps = LoadMaps(material, aiTextureType_SPECULAR, MapType::SPECULAR);
         inMaps.insert(inMaps.end(), specularMaps.begin(), specularMaps.end());
 
     } else {
@@ -199,8 +199,9 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 }
 
 
-std::vector<unsigned int> ModelLoader::LoadMaps(aiMaterial* material, aiTextureType type, MapType mType) {
-    std::vector<unsigned int> textures;
+std::vector<std::weak_ptr<Texture>> ModelLoader::LoadMaps(aiMaterial* material, aiTextureType type, MapType mType) {
+    
+    std::vector<std::weak_ptr<Texture>> textures;
 
     for (unsigned int i = 0; i < material->GetTextureCount(type); i++) {
 
@@ -224,22 +225,22 @@ std::vector<unsigned int> ModelLoader::LoadMaps(aiMaterial* material, aiTextureT
             // create the texture 
             std::shared_ptr<Texture> tex = std::make_shared<Texture>(textName.C_Str(), fullPath, mType);
 
-            // add to the list of know maps
-            mKnownLoadedMaps.emplace(cpTextName, tex->GetTextureId());
-
             // add to the texture list
-            mTextures.emplace(tex->GetTextureId(), tex);
+            mTextures.push_back(tex);
+
+            // add to the list of know maps
+            mKnownLoadedMaps.emplace(cpTextName, tex);
 
             // add to Mesh's list of textures
-            textures.push_back(tex->GetTextureId());
+            textures.push_back(tex);
 
         } else {
 
-            // get the texture id
-            auto id = it->second;
+            // get the texture ref
+            auto ref = it->second;
 
             // add to this Mesh's list of textures
-            textures.push_back(id);
+            textures.push_back(ref);
 
         }
 
@@ -251,10 +252,10 @@ std::vector<unsigned int> ModelLoader::LoadMaps(aiMaterial* material, aiTextureT
 std::vector<std::shared_ptr<Mesh>> ModelLoader::GetMeshes() {
     return mMeshes;
 }
-std::unordered_map<std::string, unsigned int> ModelLoader::GetKnownLoadedMaps() {
+std::unordered_map<std::string, std::weak_ptr<Texture>> ModelLoader::GetKnownLoadedMaps() {
     return mKnownLoadedMaps;
 }
-std::unordered_map<unsigned int, std::shared_ptr<Texture>> ModelLoader::GetTextures() {
+std::vector<std::shared_ptr<Texture>> ModelLoader::GetTextures() {
     return mTextures;
 }
 

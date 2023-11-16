@@ -17,13 +17,17 @@ private:
     std::string mModelRootDirectory;
 
     std::vector<std::shared_ptr<Mesh>> mMeshes;
-    std::unordered_map<std::string, unsigned int> mKnownLoadedMaps;
-    std::unordered_map<unsigned int, std::shared_ptr<Texture>> mTextures;
+    std::vector<std::shared_ptr<Texture>> mTextures;
+
+    // <texture name, texture_ref>
+    std::unordered_map<std::string, std::weak_ptr<Texture>> mKnownLoadedMaps;
+    
+    
 
 
     void ProcessNode(aiNode* node, const aiScene* scene);
     void ProcessMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<unsigned int> LoadMaps(aiMaterial* material, aiTextureType type, MapType mType);
+    std::vector<std::weak_ptr<Texture>> LoadMaps(aiMaterial* material, aiTextureType type, MapType mType);
 
     
 public:
@@ -32,8 +36,8 @@ public:
     void LoadModel(const std::string& name, const std::string& path);
     
     std::vector<std::shared_ptr<Mesh>> GetMeshes();
-    std::unordered_map<std::string, unsigned int> GetKnownLoadedMaps();
-    std::unordered_map<unsigned int, std::shared_ptr<Texture>> GetTextures();
+    std::unordered_map<std::string, std::weak_ptr<Texture>> GetKnownLoadedMaps();
+    std::vector<std::shared_ptr<Texture>>  GetTextures();
 
 
 

@@ -1,5 +1,6 @@
 #include "mesh.h"
 #include <glad/glad.h>
+#include "shader.h"
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, GlDraw type) {
     m_vertices = vertices;
@@ -9,11 +10,11 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>&
 
 }
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned int>& mapRefIds,  GlDraw type) {
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, std::vector<std::weak_ptr<Texture>> mapRefs,  GlDraw type) {
     m_vertices = vertices;
     m_indices = indices;
     mDrawType = type;
-    mMapRefIds = mapRefIds;
+    mMapRefs = mapRefs;
     GenMesh();
 }
 
@@ -100,25 +101,52 @@ void Mesh::ArrayDraw() {
     glDrawArrays(GL_TRIANGLES, 0, static_cast<unsigned int>(m_vertices.size()));
 }
 
-void Mesh::Draw() {
+void Mesh::Draw(const std::shared_ptr<Shader>& shader) {
+
+    // bind texture BindTextures
+    BindTextures(shader);
+
     if (mDrawType == GlDraw::MESH_INDEX_DRAW) {
-        
-        // bind texture handles
         IndexDraw();
     }
 
     if (mDrawType == GlDraw::MESH_ARRAY_DRAW) {
-        // bind texture handles
         ArrayDraw();
     }
+
+    // Unbind: will just let things get overwritten
 }
 
-void Mesh::BindTextures() {
-    if (!mMapRefIds.size()) {
+void Mesh::BindTextures(const std::shared_ptr<Shader>& shader) {
+    if (!mMapRefs.size()) {
         return;
     }
 
-    // set the uniforms
+    int diffuseN = 1;
+    int specN = 1;
+
+    for (int i = 0; i < mMapRefs.size(); i++) {
+
+        // Determine if texture is referable
+        auto textureRef = mMapRefs[i].lock();
+        if (!textureRef) {
+            continue;
+        }
+
+    
+        textureRef->Bind(i);
+        
+        if (textureRef->GetTextureType() == MapType::DIFFUSE) {
+            // set in diffuse sampler[]
+        }
+
+        if (textureRef->GetTextureType() == MapType::SPECULAR) {
+            // set in specular sampler[]
+        }
+
+           
+    }
+
 }
 Mesh::~Mesh() {
     glDeleteBuffers(1, &m_ebo);
