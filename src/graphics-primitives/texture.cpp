@@ -23,6 +23,11 @@ void Texture::LoadTexture() {
 
     // Create blank texture object ON System Mem
     glGenTextures(1, &mTextureId);
+
+    // Momentarily bind the texture to GPU unit 0 to apply operations
+    // If you do not manually bind the texture, then opengl will auto
+    // bind the latest generated textureID to GL_Texture0 --with control to unbind no longer in your hands.
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
 
 
@@ -57,13 +62,16 @@ void Texture::LoadTexture() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     
-    // Forward the texture object to GPU memory
+    // Forward the image data into the Texure object on the GPU memory
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
     // GPU generates scaled down versions
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    HIDDEN_INFO("Pushed Texture: <{}, {}>", mTextureName, mTextureId);
+    HIDDEN_INFO("Pushed Texture: <Name : {}, ID : {}>", mTextureName, mTextureId);
+
+    // unbind
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::Bind(int index = 0) {

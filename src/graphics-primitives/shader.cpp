@@ -6,6 +6,7 @@
 
 Shader::Shader(const std::string& vertex, const std::string& fragment) {
     mProgramId = glCreateProgram();
+    mShaderActive = false;
 
     int status;
     char errorLog[512];
@@ -70,16 +71,31 @@ Shader::Shader(const std::string& vertex, const std::string& fragment) {
 
 }
 
+bool Shader::IsBound() {
+    return mShaderActive;
+}
+
+void Shader::BoundWarning() {
+        HIDDEN_ERROR("Shader Program with ID({}) is not currently bound", std::to_string(mProgramId));
+}
+
 void Shader::Bind() {
     glUseProgram(mProgramId);
+    mShaderActive = true;
 }
 
 void Shader::UnBind() {
     glUseProgram(0);
-    
+    mShaderActive = false;
 }
 
 GLint Shader::GetUniformLocation(const std::string& name) {
+
+    if(!mShaderActive) {
+        BoundWarning();
+        return -1;
+    }
+
     auto it = mUniforms.find(name);
     
 
@@ -87,36 +103,51 @@ GLint Shader::GetUniformLocation(const std::string& name) {
     if(it == mUniforms.end()) {
 
         int location;
-        Bind();
-            location = glGetUniformLocation(mProgramId, name.c_str());
 
-            if (!location) {
-                HIDDEN_ERROR("Uniform variable {} was not found", name.c_str());
+            location = glGetUniformLocation(mProgramId, name.c_str()); HIDDEN_GL_ERROR_CHECK();
+
+            if (location == -1) {
+                HIDDEN_ERROR("Uniform {} Not found or Optimized out", name.c_str());
             } 
             else {
                 mUniforms[name] = location;
-                HIDDEN_INFO("Uniform variable <{},{}> added", name.c_str(), std::to_string(location));
+                HIDDEN_INFO("Uniform <Name: {}, ID: {}> added", name.c_str(), std::to_string(location));
             }
-        UnBind();
         return location;
     } 
     
     return mUniforms[name];
     
 }
+void Shader::Set1Int(int value, const std::string& name) {
+    if(!mShaderActive) {
+        BoundWarning();
+        return;
+    }
+    GLint id = GetUniformLocation(name);
+    glUniform1i(id, static_cast<GLint>(value)); HIDDEN_GL_ERROR_CHECK();
+
+}
+
 
 void Shader::Set1Float(float value, const std::string& name) {
+    if(!mShaderActive) {
+        BoundWarning();
+        return;
+    }
     GLint id = GetUniformLocation(name);
-    Bind();
-        glUniform1f(id, static_cast<GLfloat>(value)); HIDDEN_GL_ERROR_CHECK();
-    UnBind();
+    glUniform1f(id, static_cast<GLfloat>(value)); HIDDEN_GL_ERROR_CHECK();
+
 }
 
 void Shader::SetMat4(const glm::mat4& matrix, const std::string& name) {
+    if(!mShaderActive) {
+        BoundWarning();
+        return;
+    }
     GLint id = GetUniformLocation(name);
-    Bind();
-        glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(matrix)); HIDDEN_GL_ERROR_CHECK();
-    UnBind();
+    glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(matrix)); HIDDEN_GL_ERROR_CHECK();
+
 }
 
 Shader::~Shader() {

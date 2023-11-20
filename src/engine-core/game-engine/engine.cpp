@@ -129,7 +129,14 @@ std::vector<unsigned int> indices{
                              0, 1, 3,      // vertices of the first triangle
                              1, 2, 3       // vertices of the second triangle
                             };
-std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, GlDraw::MESH_ARRAY_DRAW);
+
+
+std::string textureName = "textures/container.jpg";
+std::string fullPath = pathLibrary.AssetRoot+ textureName;
+std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", fullPath, MapType::DIFFUSE);
+std::vector<std::weak_ptr<Texture>> mapRefs{text1};
+
+std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, mapRefs, GlDraw::MESH_ARRAY_DRAW);
 
 
 
@@ -141,6 +148,7 @@ std::string vertexSrc = R"(
 
     layout(location = 0) in vec3 aPosition;
     layout(location = 1) in vec2 aTextureCoords;
+    layout(location = 2) in vec3 aNormals;
 
     uniform mat4 model;
     uniform mat4 view;
@@ -164,25 +172,25 @@ std::string fragmentSrc = R"(
     in vec3 v_Position;
     in vec2 v_UVs;
     uniform sampler2D textureSampler;
-
+    uniform sampler2D diffuseSampler[10];
+    uniform sampler2D specularSampler[10];
     out vec4 f_Color;
 
     void main() {
-        f_Color = texture(textureSampler, v_UVs);
+     
+        f_Color = texture(diffuseSampler[0], v_UVs);
     }
 
 )";
 std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
 
-std::string textureName = "textures/container.jpg";
-std::string fullPath = pathLibrary.AssetRoot+ textureName;
-std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", fullPath, MapType::DIFFUSE);
 
 
-std::string modelDirectory = "3d_models/nanosuit/";
+
+std::string modelDirectory = "3d_models/backpack/";
 modelDirectory = pathLibrary.AssetRoot+ modelDirectory;
 ModelLoader loader;
-loader.LoadModel("nanosuit.obj", modelDirectory);
+loader.LoadModel("backpack.obj", modelDirectory);
 
 
 
@@ -215,14 +223,23 @@ glm::mat4 projection = glm::mat4(1.0f);
 
 
 model = glm::rotate(model, (float)(SDL_GetTicks() / 1000.f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
 projection = glm::perspective(glm::radians(45.0f), (float)mEngineWindow->GetWidth() / (float)mEngineWindow->GetHeight(), 0.1f, 100.0f);
 
-shader->SetMat4(model, "model");
-shader->SetMat4(view, "view");
-shader->SetMat4(projection, "projection");
-auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, text1, shader);
-mEngineRenderer->Submit(std::move(renderCommand));
+shader->Bind();
+    shader->SetMat4(model, "model");
+    shader->SetMat4(view, "view");
+    shader->SetMat4(projection, "projection");
+shader->UnBind();
+
+// auto renderCommand = std::make_unique<RenderMesh>(mesh, shader);
+// mEngineRenderer->Submit(std::move(renderCommand));
+
+auto meshes = loader.GetMeshes();
+for ( auto mesh : meshes) {
+    auto renderCommand = std::make_unique<RenderMesh>(mesh, shader);
+    mEngineRenderer->Submit(std::move(renderCommand));
+}
 
 
 

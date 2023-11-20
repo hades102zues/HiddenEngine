@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include <glad/glad.h>
 #include "shader.h"
+#include "../engine-core/logger/logger.h"
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, GlDraw type) {
     m_vertices = vertices;
@@ -107,7 +108,7 @@ void Mesh::Draw(const std::shared_ptr<Shader>& shader) {
     BindTextures(shader);
 
     if (mDrawType == GlDraw::MESH_INDEX_DRAW) {
-        IndexDraw();
+       IndexDraw();
     }
 
     if (mDrawType == GlDraw::MESH_ARRAY_DRAW) {
@@ -118,14 +119,18 @@ void Mesh::Draw(const std::shared_ptr<Shader>& shader) {
 }
 
 void Mesh::BindTextures(const std::shared_ptr<Shader>& shader) {
-    if (!mMapRefs.size()) {
+    if (mMapRefs.empty()) {
         return;
     }
 
-    int diffuseN = 1;
-    int specN = 1;
+    int diffuseSamplerIndex = 0;
+    int specularSamplerIndex = 0;
+    int gpUnitIndex = 0;
 
     for (int i = 0; i < mMapRefs.size(); i++) {
+       
+        // Given that there is no logic in the fragment shaders to loop through all of the map types this could present a problem
+        // with the current test setup. 
 
         // Determine if texture is referable
         auto textureRef = mMapRefs[i].lock();
@@ -134,17 +139,22 @@ void Mesh::BindTextures(const std::shared_ptr<Shader>& shader) {
         }
 
     
-        textureRef->Bind(i);
+        textureRef->Bind(gpUnitIndex);
+        gpUnitIndex++;  
         
         if (textureRef->GetTextureType() == MapType::DIFFUSE) {
-            // set in diffuse sampler[]
+            std::string name = "diffuseSampler["+std::to_string(diffuseSamplerIndex)+"]"; 
+            shader->Set1Int(i, name);
+            diffuseSamplerIndex++;
         }
 
         if (textureRef->GetTextureType() == MapType::SPECULAR) {
-            // set in specular sampler[]
+            std::string name = "specularSampler["+std::to_string(specularSamplerIndex)+"]";
+            shader->Set1Int(i, name);
+            specularSamplerIndex++;
         }
 
-           
+        
     }
 
 }
