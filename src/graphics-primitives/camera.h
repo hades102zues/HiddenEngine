@@ -10,23 +10,29 @@ enum class ProjectionType {
 class Camera {
 private:
 
-    // matrix
+    // Projection
+    ProjectionType mType;
     glm::mat4 mProjection;
-    glm::mat4 mView;
+    float mAspectRatio;
+    
 
-    // origin and 2/3 basis vectors for coordinate system
+    // View
+    glm::mat4 mView;
     glm::vec3 mPosition;
-    glm::vec3 mDirection;
-    glm::vec3 mUp;
+    glm::vec3 mLookingAt;
 
     // Camera Rotations
     float mPitch;
     float mYaw ;
 
-    // Projection Type
-    ProjectionType mType;
+
+    void CalculateView();
+    void CalculateProjection();
 public:
-    Camera(ProjectionType type, glm::vec3 position, glm::vec3 direction, glm::vec3 up, float pitch, float yaw);
-    glm::mat4 Matrix();
+    Camera();
+    Camera(ProjectionType type, glm::vec3 position, glm::vec3 at, float windowAspectRatio);
+    void Update();
+    glm::mat4 GetProjectionMatrix();
+    glm::mat4 GetViewMatrix();
     ~Camera() = default;
 };

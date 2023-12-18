@@ -11,11 +11,14 @@ private:
     std::unordered_map<std::string, GLint> mUniforms;
     bool mShaderActive;
 
+    bool IsBound();
+    void BoundWarning();
+    void GetAllUniformLocations();
+
 public:
     ~Shader();
     Shader(const std::string& vertex, const std::string& fragment);
-    bool IsBound();
-    void BoundWarning();
+  
     void Bind();
     void UnBind();
     GLint GetUniformLocation(const std::string& name);

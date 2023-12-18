@@ -44,8 +44,14 @@ RenderMesh::~RenderMesh() {
 }
 
 
+
+
+// BELOW IS NO LONGER BEING USED
+
 // **************************************
 // *** TEXTURED MESH ***
+
+
 
 RenderTexturedMesh::RenderTexturedMesh(std::weak_ptr<Mesh> mesh,  std::weak_ptr<Texture> texture, std::weak_ptr<Shader> shader):
 mMesh(mesh), mTexure(texture), mShader(shader){}

@@ -18,7 +18,7 @@ enum class GlDraw {
 struct Vertex {
     glm::vec3 Position;
     glm::vec2 TextCoords;
-    glm::vec3 Normal;
+    glm::vec3 Normals;
     
 };
 

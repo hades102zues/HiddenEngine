@@ -71,6 +71,20 @@ Shader::Shader(const std::string& vertex, const std::string& fragment) {
 
 }
 
+void Shader::GetAllUniformLocations() {
+    Bind();
+
+        // Matrices
+        GetUniformLocation("model");
+        GetUniformLocation("view");
+        GetUniformLocation("projection");
+
+
+
+    UnBind();
+
+}
+
 bool Shader::IsBound() {
     return mShaderActive;
 }

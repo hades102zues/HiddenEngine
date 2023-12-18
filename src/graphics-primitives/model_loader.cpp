@@ -80,15 +80,15 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
         
         
         // *********
-        // Normal
+        // Normals
         if (mesh->HasNormals()) {
             vec3d.x = mesh->mNormals[i].x;
             vec3d.y = mesh->mNormals[i].y;
             vec3d.z = mesh->mNormals[i].z;
 
-            vertex.Normal = vec3d;
+            vertex.Normals = vec3d;
         } else {
-            vertex.Normal = glm::vec3(0.0f);
+            vertex.Normals = glm::vec3(0.0f);
             HIDDEN_WARN("Mesh has no normals")
 
         }

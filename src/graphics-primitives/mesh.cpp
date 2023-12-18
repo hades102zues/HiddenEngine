@@ -50,6 +50,8 @@ void Mesh::GenMesh() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextCoords));
 
     // Location 2 will hold Normals (x,y,z)
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normals));
 
 
 
@@ -83,14 +85,14 @@ void Mesh::Bind() {
     glBindVertexArray(m_vao);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    // glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(2);
 
 }
 
 void Mesh::UnBind() {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
-    // glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(2);
     glBindVertexArray(0);
 }
 
@@ -143,16 +145,16 @@ void Mesh::BindTextures(const std::shared_ptr<Shader>& shader) {
         gpUnitIndex++;  
         
         if (textureRef->GetTextureType() == MapType::DIFFUSE) {
-            std::string name = "diffuseSampler["+std::to_string(diffuseSamplerIndex)+"]"; 
+            std::string name = "uv_DiffuseSamplers["+std::to_string(diffuseSamplerIndex)+"]"; 
             shader->Set1Int(i, name);
             diffuseSamplerIndex++;
         }
 
-        if (textureRef->GetTextureType() == MapType::SPECULAR) {
-            std::string name = "specularSampler["+std::to_string(specularSamplerIndex)+"]";
-            shader->Set1Int(i, name);
-            specularSamplerIndex++;
-        }
+        // if (textureRef->GetTextureType() == MapType::SPECULAR) {
+        //     std::string name = "uv_SpecularSamplers["+std::to_string(specularSamplerIndex)+"]";
+        //     shader->Set1Int(i, name);
+        //     specularSamplerIndex++;
+        // }
 
         
     }

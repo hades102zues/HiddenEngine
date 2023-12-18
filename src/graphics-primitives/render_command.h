@@ -40,9 +40,12 @@ public:
 
 
 
+// BELOW IS NO LONGER BEING USED
 
 // **************************************
 // *** TEXTURED MESH ***
+
+
 
 class RenderTexturedMesh : public RenderCommand {
 

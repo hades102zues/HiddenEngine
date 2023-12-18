@@ -76,91 +76,32 @@ void HiddenEngine::Run() {
     
 // ******
 // **** TEST CODE
-std::vector<Vertex> vertices{
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f, -0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f, -0.5f),  glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(0.5f,  0.5f,  0.5f),  glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
-        Vertex {glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)}
-};
-
-
-// Every vertex attribute is parsed to some location on a VAO
-// But each location in the VAO is an array that is populated upon ingestion.
-// For example, all the data associated with the very first vertex ingested would be found at index 0 of every location array.
-// The API allows us to specifically target indices so that we can reuse vertex data.
-std::vector<unsigned int> indices{
-                             0, 1, 3,      // vertices of the first triangle
-                             1, 2, 3       // vertices of the second triangle
-                            };
-
-
-std::string textureName = "textures/container.jpg";
-std::string fullPath = pathLibrary.AssetRoot+ textureName;
-std::shared_ptr<Texture> text1 = std::make_shared<Texture>("container", fullPath, MapType::DIFFUSE);
-std::vector<std::weak_ptr<Texture>> mapRefs{text1};
-
-std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, mapRefs, GlDraw::MESH_ARRAY_DRAW);
-
-
-
-
-
 
 std::string vertexSrc = R"(
     #version 410 core
 
     layout(location = 0) in vec3 aPosition;
     layout(location = 1) in vec2 aTextureCoords;
-    layout(location = 2) in vec3 aNormals;
+    layout(location = 2) in vec3 aNormal;
 
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
 
-    out vec3 v_Position;
-    out vec2 v_UVs;
+
+    out vec2 v_TextureUVs;
+    out vec3 v_WorldVertex;
+    out vec3 v_WorldNormal;
     
 
     void main() {
-        v_Position = aPosition;
-        v_UVs = aTextureCoords;
+        v_TextureUVs = aTextureCoords;
+
+        v_WorldVertex = vec3(model * vec4(aPosition, 1.0));
+
+        mat3 NormalMatrix = mat3(transpose(inverse(model)));
+        v_WorldNormal = vec3(NormalMatrix * aNormal);
+
         gl_Position = projection * view * model * vec4(aPosition, 1.0);
 
     }
@@ -169,16 +110,61 @@ std::string vertexSrc = R"(
 std::string fragmentSrc = R"(
     #version 410 core
 
-    in vec3 v_Position;
-    in vec2 v_UVs;
-    uniform sampler2D textureSampler;
-    uniform sampler2D diffuseSampler[10];
-    uniform sampler2D specularSampler[10];
+    in vec2 v_TextureUVs;
+    in vec3 v_WorldVertex;
+    in vec3 v_WorldNormal;
+
+
+    uniform sampler2D uv_DiffuseSamplers[10];
+    uniform sampler2D uv_SpecularSamplers[10];
     out vec4 f_Color;
 
     void main() {
-     
-        f_Color = texture(diffuseSampler[0], v_UVs);
+        //*********************
+        // Camera
+        vec3 cameraPos = vec3(0.0, 0.0, 0.0);
+
+        //*********************
+        // Basic Light Properties
+
+        vec3 lightColor = vec3(1.0, 1.0, 1.0);
+        vec3 lightPos = vec3(0.0, 5.0, 1.0);
+        float lightAmbientIntensity = 0.1;
+
+        //*********************
+        // Ambient Calculations
+
+        // AmbientStrength represents what fraction of the original light is now avaiable in the background. 
+        float ambientStrenth = lightAmbientIntensity; 
+        vec3 ambient = ambientStrenth * lightColor;
+
+
+        //*********************
+        // Diffuse Calculations
+
+        vec3 norm = normalize(v_WorldNormal);
+        vec3 toLight = normalize(lightPos - v_WorldVertex);
+        float diff = max(dot(toLight, norm), 0.0);
+        vec3 diffuse = diff * lightColor;
+
+
+        //*********************
+        // Specular Calculations
+
+        float reflectivity = 0.5;
+        vec3 toEye = normalize(cameraPos - v_WorldVertex);
+        vec3 reflectedRay = reflect(-toLight, norm);  
+        float disperseFactor = pow(max(dot(toEye, reflectedRay), 0.0), 32);
+        vec3 specular = disperseFactor * (reflectivity * lightColor); 
+
+
+       //*********************
+       // Results
+
+        vec3 fragColor = texture(uv_DiffuseSamplers[0], v_TextureUVs).xyz;
+        vec3 result = ( ambient + diffuse + specular ) * fragColor;
+
+        f_Color = vec4(result, 1.0); 
     }
 
 )";
@@ -193,6 +179,8 @@ ModelLoader loader;
 loader.LoadModel("backpack.obj", modelDirectory);
 
 
+// ******
+// ****
 
 
     int fpsCap = 60;
@@ -224,16 +212,19 @@ glm::mat4 projection = glm::mat4(1.0f);
 
 model = glm::rotate(model, (float)(SDL_GetTicks() / 1000.f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
-projection = glm::perspective(glm::radians(45.0f), (float)mEngineWindow->GetWidth() / (float)mEngineWindow->GetHeight(), 0.1f, 100.0f);
+
+
+float fov = 45; //degrees
+float aspectRatio = (float)mEngineWindow->GetWidth() / (float)mEngineWindow->GetHeight(); 
+float distanceToNearPlane = 0.1f;
+float distanceToFarPlane = 100.0f;
+projection = glm::perspective(glm::radians(fov), aspectRatio, distanceToNearPlane, distanceToFarPlane);
 
 shader->Bind();
     shader->SetMat4(model, "model");
     shader->SetMat4(view, "view");
     shader->SetMat4(projection, "projection");
 shader->UnBind();
-
-// auto renderCommand = std::make_unique<RenderMesh>(mesh, shader);
-// mEngineRenderer->Submit(std::move(renderCommand));
 
 auto meshes = loader.GetMeshes();
 for ( auto mesh : meshes) {
@@ -242,7 +233,8 @@ for ( auto mesh : meshes) {
 }
 
 
-
+// ******
+// ****
 
 
 
