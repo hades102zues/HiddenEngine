@@ -140,19 +140,21 @@ void Mesh::BindTextures(const std::shared_ptr<Shader>& shader) {
             continue;
         }
 
-    
+        // set the texture to a gpu unit
         textureRef->Bind(gpUnitIndex);
-        gpUnitIndex++;  
+        
         
         if (textureRef->GetTextureType() == MapType::DIFFUSE) {
             std::string name = "uv_DiffuseSamplers["+std::to_string(diffuseSamplerIndex)+"]"; 
-            shader->Set1Int(i, name);
+            shader->Set1Int(gpUnitIndex, name);
+            gpUnitIndex++;  
             diffuseSamplerIndex++;
         }
 
         // if (textureRef->GetTextureType() == MapType::SPECULAR) {
         //     std::string name = "uv_SpecularSamplers["+std::to_string(specularSamplerIndex)+"]";
-        //     shader->Set1Int(i, name);
+        //     shader->Set1Int(gpUnitIndex, name);
+        //     gpUnitIndex++;  
         //     specularSamplerIndex++;
         // }
 
