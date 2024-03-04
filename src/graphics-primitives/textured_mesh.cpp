@@ -1,19 +1,19 @@
-#include "mesh.h"
-
+#include "textured_mesh.h"
 #include <glad/glad.h>
+#include "shader.h"
 #include "../engine-core/logger/logger.h"
 
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, GlDraw type) {
+TexturedMesh::TexturedMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, std::vector<std::weak_ptr<Texture>> mapRefs,  GlDraw type) {
     m_vertices = vertices;
     m_indices = indices;
     mDrawType = type;
-
+    mMapRefs = mapRefs;
     GenMesh();
 }
 
 
-void Mesh::GenMesh() {
+void TexturedMesh::GenMesh() {
 
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
@@ -73,9 +73,7 @@ void Mesh::GenMesh() {
     glBindVertexArray(0);
 }
 
-
-
-void Mesh::Bind() {
+void TexturedMesh::Bind() {
 
     glBindVertexArray(m_vao);
     glEnableVertexAttribArray(0);
@@ -84,14 +82,25 @@ void Mesh::Bind() {
 
 }
 
-void Mesh::UnBind() {
+void TexturedMesh::UnBind() {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
     glBindVertexArray(0);
 }
 
-void Mesh::Draw(const std::shared_ptr<Shader>& shader) {
+void TexturedMesh::IndexDraw() {
+    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_indices.size()), GL_UNSIGNED_INT, 0);
+}
+
+void TexturedMesh::ArrayDraw() {
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<unsigned int>(m_vertices.size()));
+}
+
+void TexturedMesh::Draw(const std::shared_ptr<Shader>& shader) {
+
+    // bind texture BindTextures
+    BindTextures(shader);
 
     if (mDrawType == GlDraw::MESH_INDEX_DRAW) {
        IndexDraw();
@@ -104,10 +113,54 @@ void Mesh::Draw(const std::shared_ptr<Shader>& shader) {
     // Unbind: will just let things get overwritten
 }
 
-void Mesh::IndexDraw() {
-    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_indices.size()), GL_UNSIGNED_INT, 0);
+void TexturedMesh::BindTextures(const std::shared_ptr<Shader>& shader) {
+    if (mMapRefs.empty()) {
+        return;
+    }
+
+    int diffuseSamplerIndex = 0;
+    int specularSamplerIndex = 0;
+    int gpUnitIndex = 0;
+
+    for (int i = 0; i < mMapRefs.size(); i++) {
+       
+        // Given that there is no logic in the fragment shaders to loop through all of the map types this could present a problem with the current test setup. 
+
+        // Determine if texture is referable
+        auto textureRef = mMapRefs[i].lock();
+        if (!textureRef) {
+            continue;
+        }
+
+        // Set the texture to next available gpu unit
+        textureRef->Bind(gpUnitIndex);
+        
+
+        // Seperate sampler arrays are created for referencing diffuse and specular textures.
+        // A location in those array will hold the gpu unit that the texture is being bound to
+
+        if (textureRef->GetTextureType() == MapType::DIFFUSE) {
+            std::string samplerArrayName = "uv_DiffuseSamplers["+std::to_string(diffuseSamplerIndex)+"]"; 
+            shader->Set1Int(gpUnitIndex, samplerArrayName);
+            gpUnitIndex++;  
+            diffuseSamplerIndex++;
+        }
+
+        // if (textureRef->GetTextureType() == MapType::SPECULAR) {
+        //     std::string samplerArrayName = "uv_SpecularSamplers["+std::to_string(specularSamplerIndex)+"]";
+        //     shader->Set1Int(gpUnitIndex, samplerArrayName);
+        //     gpUnitIndex++;  
+        //     specularSamplerIndex++;
+        // }
+
+        
+    }
+
+}
+TexturedMesh::~TexturedMesh() {
+    glDeleteBuffers(1, &m_ebo);
+    glDeleteBuffers(1, &m_vbo);
+    glDeleteVertexArrays(1, &m_vao);
 }
 
-void Mesh::ArrayDraw() {
-    glDrawArrays(GL_TRIANGLES, 0, static_cast<unsigned int>(m_vertices.size()));
-}
+

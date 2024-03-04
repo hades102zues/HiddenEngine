@@ -2,14 +2,17 @@
 #include "../engine-core/logger/logger.h"  
 #include "../common/path_dict.h" 
 
+// Model is a discrete object in the game world
+// The model may be a composition of one or many meshes.
+// A mesh is a collection of geometric data (vertex positions, indices, texcoords, tangents, etcs) that relates to some subsection of the object
+// Each vertex will have some material/texture it's associated with
 
-
-ModelLoader::ModelLoader () {
+Model::Model () {
     HIDDEN_INFO("A model loader was created");
     
 }
 
-void ModelLoader::LoadModel(const std::string& name, const std::string& path) {
+void Model::LoadModel(const std::string& name, const std::string& path) {
     
 
     mModelName = name;
@@ -31,7 +34,7 @@ void ModelLoader::LoadModel(const std::string& name, const std::string& path) {
     
 }
 
-void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene) {
+void Model::ProcessNode(aiNode* node, const aiScene* scene) {
 
     // Process the node's Meshes
     for (int i = 0; i < node->mNumMeshes; i++) {
@@ -49,7 +52,7 @@ void ModelLoader::ProcessNode(aiNode* node, const aiScene* scene) {
     // A single model item is usually broken down into a number of sub-meshes
     // This function will parse each submesh
 
-void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
+void Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     
 
 
@@ -191,7 +194,7 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     // *********
     // Store Data
-    std::shared_ptr<Mesh> inMesh = std::make_shared<Mesh>(inVertices, inIndices, inMaps, GlDraw::MESH_INDEX_DRAW);
+    std::shared_ptr<TexturedMesh> inMesh = std::make_shared<TexturedMesh>(inVertices, inIndices, inMaps, GlDraw::MESH_INDEX_DRAW);
     mMeshes.push_back(inMesh);
 
 
@@ -199,7 +202,7 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 }
 
 
-std::vector<std::weak_ptr<Texture>> ModelLoader::LoadMaps(aiMaterial* material, aiTextureType type, MapType mType) {
+std::vector<std::weak_ptr<Texture>> Model::LoadMaps(aiMaterial* material, aiTextureType type, MapType mType) {
     
     std::vector<std::weak_ptr<Texture>> textures;
 
@@ -226,6 +229,7 @@ std::vector<std::weak_ptr<Texture>> ModelLoader::LoadMaps(aiMaterial* material, 
             std::shared_ptr<Texture> tex = std::make_shared<Texture>(textName.C_Str(), fullPath, mType);
 
             // add to the texture list
+            // this mTextures is pretty useless
             mTextures.push_back(tex);
 
             // add to the list of know maps
@@ -249,17 +253,17 @@ std::vector<std::weak_ptr<Texture>> ModelLoader::LoadMaps(aiMaterial* material, 
     return textures;
 }
 
-std::vector<std::shared_ptr<Mesh>> ModelLoader::GetMeshes() {
+std::vector<std::shared_ptr<TexturedMesh>> Model::GetMeshes() {
     return mMeshes;
 }
-std::unordered_map<std::string, std::weak_ptr<Texture>> ModelLoader::GetKnownLoadedMaps() {
+std::unordered_map<std::string, std::weak_ptr<Texture>> Model::GetKnownLoadedMaps() {
     return mKnownLoadedMaps;
 }
-std::vector<std::shared_ptr<Texture>> ModelLoader::GetTextures() {
+std::vector<std::shared_ptr<Texture>> Model::GetTextures() {
     return mTextures;
 }
 
 
-ModelLoader::~ModelLoader() {
+Model::~Model() {
 
 }

@@ -5,7 +5,7 @@
 
 #include "../../common/path_dict.h"
 
-#include "../../graphics-primitives/mesh.h"
+#include "../../graphics-primitives/textured_mesh.h"
 #include "../../graphics-primitives/shader.h"
 #include "../../graphics-primitives/texture.h"
 #include "../../graphics-primitives/render_command.h"
@@ -175,7 +175,7 @@ std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc
 
 std::string modelDirectory = "3d_models/backpack/";
 modelDirectory = pathLibrary.AssetRoot+ modelDirectory;
-ModelLoader loader;
+Model loader;
 loader.LoadModel("backpack.obj", modelDirectory);
 
 
@@ -220,15 +220,18 @@ float distanceToNearPlane = 0.1f;
 float distanceToFarPlane = 100.0f;
 projection = glm::perspective(glm::radians(fov), aspectRatio, distanceToNearPlane, distanceToFarPlane);
 
+
 shader->Bind();
     shader->SetMat4(model, "model");
     shader->SetMat4(view, "view");
     shader->SetMat4(projection, "projection");
 shader->UnBind();
 
-auto meshes = loader.GetMeshes();
-for ( auto mesh : meshes) {
-    auto renderCommand = std::make_unique<RenderMesh>(mesh, shader);
+
+// this should be a function in the model?
+//auto meshes = loader.GetMeshes();
+for ( auto mesh : loader.GetMeshes()) {
+    auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, shader);
     mEngineRenderer->Submit(std::move(renderCommand));
 }
 

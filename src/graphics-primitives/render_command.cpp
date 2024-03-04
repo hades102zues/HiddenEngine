@@ -4,6 +4,7 @@
 #include "render_command.h"
 #include "shader.h"
 #include "mesh.h"
+#include "textured_mesh.h"
 #include "texture.h"
 
 
@@ -46,37 +47,33 @@ RenderMesh::~RenderMesh() {
 
 
 
-// BELOW IS NO LONGER BEING USED
+
 
 // **************************************
 // *** TEXTURED MESH ***
 
 
-
-RenderTexturedMesh::RenderTexturedMesh(std::weak_ptr<Mesh> mesh,  std::weak_ptr<Texture> texture, std::weak_ptr<Shader> shader):
-mMesh(mesh), mTexure(texture), mShader(shader){}
+RenderTexturedMesh::RenderTexturedMesh(std::weak_ptr<TexturedMesh> mesh, std::weak_ptr<Shader> shader)
+:mMesh(mesh), mShader(shader) {}
 
 
 void RenderTexturedMesh::Execute() {
 
     // Must promote weak pointers to shared pointer before they can be used.
     // If a resource doesn't exist-- a nullptr is assigned
-    std::shared_ptr<Mesh> mesh = mMesh.lock();
+    std::shared_ptr<TexturedMesh> mesh = mMesh.lock();
     std::shared_ptr<Shader> shader = mShader.lock();
-    std::shared_ptr<Texture> texture = mTexure.lock();
 
 
-    if (!(mesh && shader && texture)) {
-        HIDDEN_WARN("Attempted to render textured mesh on absent data");
+    if (!(mesh && shader)) {
+        HIDDEN_WARN("Attempted to render mesh on absent data");
         return;
     }
 
     shader->Bind();
     mesh->Bind();
-    texture->Bind(0);
     // set uniform matrices
         mesh->Draw(shader);
-    texture->UnBind();
     mesh->UnBind();
     shader->UnBind();
     

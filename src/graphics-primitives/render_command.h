@@ -13,6 +13,7 @@ public:
     virtual ~RenderCommand() {}
 };
 
+class TexturedMesh;
 class Mesh;
 class Shader;
 class Texture;
@@ -38,25 +39,19 @@ public:
 };
 
 
-
-
-// BELOW IS NO LONGER BEING USED
-
 // **************************************
-// *** TEXTURED MESH ***
-
-
+// *** TEXTURED MESH ****
 
 class RenderTexturedMesh : public RenderCommand {
 
 private: 
     // Weak pointers don't assume ownership
     // Great for data that has chance of not existing  
-    std::weak_ptr<Mesh>  mMesh;
+    std::weak_ptr<TexturedMesh>  mMesh;
     std::weak_ptr<Shader> mShader;
-    std::weak_ptr<Texture> mTexure;
+
 public:
-    RenderTexturedMesh(std::weak_ptr<Mesh> mesh,  std::weak_ptr<Texture> texture, std::weak_ptr<Shader> shader);
+    RenderTexturedMesh(std::weak_ptr<TexturedMesh> mesh,  std::weak_ptr<Shader> shader);
     ~RenderTexturedMesh();
     virtual void Execute() override;
 };
