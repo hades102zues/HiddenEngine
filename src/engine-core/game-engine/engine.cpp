@@ -18,6 +18,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../../graphics-primitives/model_loader.h"
+#include "../../graphics-primitives/terrain.h"
 
 
 // std::unique_ptr<HiddenEngine> HiddenEngine::sEngineInstance;
@@ -149,7 +150,7 @@ for ( auto mesh : loader.GetMeshes()) {
     mEngineRenderer->Submit(std::move(renderCommand));
 }
 
-
+Terrain terrain(0.0f, 0.0f, 3.0f, 3);
 // ******
 // ****
 
