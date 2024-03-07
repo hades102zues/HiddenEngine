@@ -78,14 +78,12 @@ void HiddenEngine::Run() {
 
     
 // ******
-// **** TEST CODE
+// **** TEST CODE START
 
 
 std::string vertexSrc = readFile(pathLibrary.ShaderRoot + "texture_shader.vs");
 std::string fragmentSrc = readFile(pathLibrary.ShaderRoot + "texture_shader.fs");
-std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
-
-
+std::shared_ptr<Shader> modelShader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
 
 
 std::string modelDirectory = "3d_models/backpack/";
@@ -94,8 +92,24 @@ Model loader;
 loader.LoadModel("backpack.obj", modelDirectory);
 
 
+
+
+
+
+
+
+std::string vertexSrc2 = readFile(pathLibrary.ShaderRoot + "basic_shader.vs");
+std::string fragmentSrc2 = readFile(pathLibrary.ShaderRoot + "basic_shader.fs");
+std::shared_ptr<Shader> terrainShader = std::make_shared<Shader>(vertexSrc2, fragmentSrc2);
+
+
+Terrain terrain(0.0f, 0.0f, 8000.0f, 11);
+
+
 // ******
-// ****
+// **** TEST CODE END
+
+
 
 
     int fpsCap = 60;
@@ -123,10 +137,9 @@ glm::mat4 model = glm::mat4(1.0f);
 glm::mat4 view = glm::mat4(1.0f);
 glm::mat4 projection = glm::mat4(1.0f);
 
-
-
 model = glm::rotate(model, (float)(SDL_GetTicks() / 1000.f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
+
 
 
 float fov = 45; //degrees
@@ -136,23 +149,32 @@ float distanceToFarPlane = 100.0f;
 projection = glm::perspective(glm::radians(fov), aspectRatio, distanceToNearPlane, distanceToFarPlane);
 
 
-shader->Bind();
-    shader->SetMat4(model, "model");
-    shader->SetMat4(view, "view");
-    shader->SetMat4(projection, "projection");
-shader->UnBind();
-
+modelShader->Bind();
+    modelShader->SetMat4(model, "model");
+    modelShader->SetMat4(view, "view");
+    modelShader->SetMat4(projection, "projection");
+modelShader->UnBind();
 
 // this should be a function in the model?
-//auto meshes = loader.GetMeshes();
+auto meshes = loader.GetMeshes();
 for ( auto mesh : loader.GetMeshes()) {
-    auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, shader);
+    auto renderCommand = std::make_unique<RenderTexturedMesh>(mesh, modelShader);
     mEngineRenderer->Submit(std::move(renderCommand));
 }
 
-Terrain terrain(0.0f, 0.0f, 3.0f, 3);
+
+
+terrainShader->Bind();
+    terrainShader->SetMat4(model, "model");
+    terrainShader->SetMat4(view, "view");
+    terrainShader->SetMat4(projection, "projection");
+terrainShader->UnBind();
+
+auto renderTerrain = std::make_unique<RenderMesh>(terrain.GetMesh(), terrainShader);
+mEngineRenderer->Submit(std::move(renderTerrain));
+
 // ******
-// ****
+// **** TEST CODE END
 
 
 

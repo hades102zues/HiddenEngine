@@ -1,7 +1,8 @@
 #include "terrain.h"
 #include "../engine-core/logger/logger.h"
-#include <cmath>
 
+#include <cmath>
+#include <cstdlib>
 
 
 Terrain::Terrain(float worldBaseX, float worldBaseZ, float lenTerrainSide, int numVerticesAlongTerrainSide) {
@@ -19,6 +20,8 @@ Terrain::Terrain(float worldBaseX, float worldBaseZ, float lenTerrainSide, int n
 
     GenVertices();
     GenIndices();
+    GenMesh();
+
 }
 
 void Terrain::GenVertices() {
@@ -29,12 +32,21 @@ void Terrain::GenVertices() {
         for (int ix = 0 ; ix < mNumVerticesAlongTerrainSide; ix++ ) {
             float xPosition = mBaseRealX + (ix * mTileLength);
             float zPosition = mBaseRealZ - (iz * mTileLength);
+            float yPosition = static_cast<float>(1+(std::rand() % 100));
 
             Vertex vertex;
-            glm::vec3 pos(xPosition, 0, zPosition);
-            vertex.Position = glm::vec3(xPosition, 0.0f, zPosition);
+            vertex.Position = glm::vec3(xPosition, yPosition, zPosition);
             vertex.Normals = glm::vec3(0.0f, 0.0f, 0.0f);
             vertex.TextCoords = glm::vec2(0.0f, 0.0f);
+
+
+            // float xPosition = mBaseRealX + (ix * mTileLength);
+            // float zPosition = mBaseRealZ + (iz * mTileLength);
+          
+            // Vertex vertex;
+            // vertex.Position = glm::vec3(xPosition, zPosition, 0.0f);
+            // vertex.Normals = glm::vec3(0.0f, 0.0f, 0.0f);
+            // vertex.TextCoords = glm::vec2(0.0f, 0.0f);
 
             mVertices.push_back(vertex);
 
@@ -49,12 +61,14 @@ void Terrain::GenIndices() {
 
     int totalNumberOfVertices = mNumVerticesAlongTerrainSide * mNumVerticesAlongTerrainSide;
 
-    std::vector<int> ind;
-
+    
     int indexBase = 0;
+    std::vector<unsigned int> ind;
+
 
     for (int i = 0; i < totalNumberOfVertices; i++) {
 
+        // horizontal check || vertical check
         if ( (indexBase + 1 ) % mNumVerticesAlongTerrainSide == 0 || indexBase + mNumVerticesAlongTerrainSide >= (totalNumberOfVertices)) {
             indexBase++;
             continue;
@@ -74,14 +88,24 @@ void Terrain::GenIndices() {
         indexBase++;
     }
 
-    std::string list = "";
-    for (auto i : ind ){
-        list = list +","+ std::to_string(i);
-    }
+    // std::string list = "";
+    // for (auto i : ind ){
+    //     list = list +","+ std::to_string(i);
+    // }
 
     
-    HIDDEN_INFO("Index Base {}. Total Number of indices {}", std::to_string(indexBase), std::to_string(ind.size()));
-    HIDDEN_INFO("Items in indices array: {}", list);
+    // HIDDEN_INFO("Index Base {}. Total Number of indices {}", std::to_string(indexBase), std::to_string(ind.size()));
+    // HIDDEN_INFO("Items in indices array: {}", list);
+
+    mIndices = ind;
+}
+
+void Terrain::GenMesh() {
+    mTerrainMesh = std::make_shared<Mesh>(mVertices, mIndices, GlDraw::MESH_INDEX_DRAW);
+}
+
+std::shared_ptr<Mesh>& Terrain::GetMesh() {
+    return mTerrainMesh;
 }
 
 Terrain::~Terrain() {

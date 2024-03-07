@@ -111,3 +111,8 @@ void Mesh::IndexDraw() {
 void Mesh::ArrayDraw() {
     glDrawArrays(GL_TRIANGLES, 0, static_cast<unsigned int>(m_vertices.size()));
 }
+
+
+Mesh::~Mesh() {
+
+}
