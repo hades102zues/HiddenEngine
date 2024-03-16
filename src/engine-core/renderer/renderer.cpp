@@ -50,11 +50,11 @@ void Renderer::Submit(std::unique_ptr<RenderCommand> command) {
 
 // 
 void Renderer::ClearQueue() {
-    HIDDEN_ASSERT(mRenderComands.size() == 0, "Unflushed Render Commands in queue");
+ 
     while (mRenderComands.size()) {
         mRenderComands.pop();
     }
-    
+       HIDDEN_ASSERT(mRenderComands.size() == 0, "Unflushed Render Commands in queue");
 }
 
 

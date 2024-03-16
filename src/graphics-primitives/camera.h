@@ -1,3 +1,5 @@
+#pragma once
+
 #include <glm/mat4x4.hpp>
 #include <glm/glm.hpp>
 
@@ -18,23 +20,32 @@ private:
 
     // View
     glm::mat4 mView;
+
+
+    // movement
     glm::vec3 mPosition;
-    glm::vec3 mLookingAt;
-
-
+    const float mSpeed = 4.5f; // pixels per second along any axis
+ 
 
     // Camera Rotations
     float mPitch;
-    float mYaw ;
+
 
 
     void CalculateView();
     void CalculateProjection();
 public:
     Camera();
-    Camera(ProjectionType type, glm::vec3 position, glm::vec3 at, float windowAspectRatio);
+    Camera(ProjectionType type, glm::vec3 position,  float windowAspectRatio);
     void Update();
     glm::mat4 GetProjectionMatrix();
     glm::mat4 GetViewMatrix();
+    void MoveCameraRight(float dt);
+    void MoveCameraLeft(float dt);
+    void MoveCameraForward(float dt);
+    void MoveCameraBackward(float dt);
+    void MoveCameraUp(float dt);
+    void MoveCameraDown(float dt);
+    void PitchCamera();
     ~Camera() = default;
 };

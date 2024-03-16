@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h> 
 #include "../window/window.h"
 #include "../renderer/renderer.h"
+#include "../../graphics-primitives/camera.h"
 #include <memory>
 
 
@@ -21,6 +22,8 @@ class HiddenEngine {
         bool mIsRunning;
         std::unique_ptr<SDLWindow> mEngineWindow;
         std::unique_ptr<Renderer> mEngineRenderer;
+        std::shared_ptr<Camera> mCamera;
+        float mDeltaTime = 0.0f; // in seconds
 
 
         void Render();

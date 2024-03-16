@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h> 
 #include "../logger/logger.h"
 
+
 SDL_Window* SDLWindow::Get() {
     return m_window;
 }
@@ -77,7 +78,7 @@ int SDLWindow::Init() {
 
 }
 
-void SDLWindow::HandleInputs(bool& m_isRunning) {
+void SDLWindow::HandleKeyPress(bool& m_isRunning, const std::shared_ptr<Camera>& gameCamera, float dt) {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
         switch (e.type) {
@@ -88,9 +89,55 @@ void SDLWindow::HandleInputs(bool& m_isRunning) {
                 if (e.key.keysym.sym == SDLK_ESCAPE) {
                     m_isRunning = false;
                 }
+
+                // if (e.key.keysym.sym == SDLK_a) {
+                //     gameCamera->MoveCameraLeft(dt);
+                // }
+
+                // if (e.key.keysym.sym == SDLK_s) {
+                //     gameCamera->MoveCameraBackward(dt);
+                // }
+
+                // if (e.key.keysym.sym == SDLK_d) {
+                //     gameCamera->MoveCameraRight(dt);
+                // }
+
+                // if (e.key.keysym.sym == SDLK_w) {
+                //     gameCamera->MoveCameraForward(dt);
+                // }
+
                 break;
         }
     }
+
+    const Uint8* keystates = SDL_GetKeyboardState(NULL);
+    if (keystates[SDL_SCANCODE_A]) {
+        gameCamera->MoveCameraLeft(dt);
+    }
+
+    if (keystates[SDL_SCANCODE_S]) {
+        gameCamera->MoveCameraBackward(dt);
+    }
+
+    if (keystates[SDL_SCANCODE_D]) {
+        gameCamera->MoveCameraRight(dt);
+    }
+
+    if (keystates[SDL_SCANCODE_W]) {
+        gameCamera->MoveCameraForward(dt);
+    }
+
+    if (keystates[SDL_SCANCODE_UP]) {
+        gameCamera->MoveCameraUp(dt);
+    }
+
+    if (keystates[SDL_SCANCODE_DOWN]) {
+        gameCamera->MoveCameraDown(dt);
+    }
+
+
+
+
 }
 
 void SDLWindow::GlClear() {

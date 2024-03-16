@@ -21,6 +21,7 @@
 #include "../../graphics-primitives/terrain.h"
 
 
+
 // std::unique_ptr<HiddenEngine> HiddenEngine::sEngineInstance;
 // std::unique_ptr<HiddenEngine>& HiddenEngine::GetEngine() {
 
@@ -65,6 +66,14 @@ int HiddenEngine::Initialize() {
 
 
     // *************
+    // **** Initialize Renderer
+    mCamera = std::make_shared<Camera>(
+                ProjectionType::PERSPECTIVE
+                , glm::vec3(0.0f, 0.0f, 3.0f)
+                , (float)mEngineWindow->GetWidth() / (float)mEngineWindow->GetHeight()
+            );
+
+    // *************
     // **** Closeout
 
     mIsRunning = true;
@@ -95,15 +104,15 @@ loader.LoadModel("backpack.obj", modelDirectory);
 
 
 
-
-
-
 std::string vertexSrc2 = readFile(pathLibrary.ShaderRoot + "basic_shader.vs");
 std::string fragmentSrc2 = readFile(pathLibrary.ShaderRoot + "basic_shader.fs");
 std::shared_ptr<Shader> terrainShader = std::make_shared<Shader>(vertexSrc2, fragmentSrc2);
 
 
-Terrain terrain(0.0f, 0.0f, 8000.0f, 11);
+Terrain terrain(0.0f, 0.0f, 80000.0f, 11);
+
+
+
 
 
 // ******
@@ -117,7 +126,7 @@ Terrain terrain(0.0f, 0.0f, 8000.0f, 11);
     float currentTime = SDL_GetTicks(); // in miliseonds
     float prevTime = currentTime; // in miliseconds
     float timeElapsed; // in miliseconds
-    float dt; // in seconds
+
 
 
     HIDDEN_INFO("Engine is running");
@@ -134,14 +143,15 @@ Terrain terrain(0.0f, 0.0f, 8000.0f, 11);
 // **** TEST CODE
 
 glm::mat4 model = glm::mat4(1.0f);
-glm::mat4 view = glm::mat4(1.0f);
+//model = glm::rotate(model, (float)(SDL_GetTicks() / 1000.f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+
+// glm::mat4 view = glm::mat4(1.0f);
+// view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
+
+
+glm::mat4 view = mCamera->GetViewMatrix();
+
 glm::mat4 projection = glm::mat4(1.0f);
-
-model = glm::rotate(model, (float)(SDL_GetTicks() / 1000.f) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-view =  glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
-
-
-
 float fov = 45; //degrees
 float aspectRatio = (float)mEngineWindow->GetWidth() / (float)mEngineWindow->GetHeight(); 
 float distanceToNearPlane = 0.1f;
@@ -184,7 +194,7 @@ mEngineRenderer->Submit(std::move(renderTerrain));
         // Compute dt & waiting
         currentTime = SDL_GetTicks();
         timeElapsed = currentTime - prevTime;
-        dt = timeElapsed / 1000.f;
+        mDeltaTime = timeElapsed / 1000.f;
         prevTime = currentTime;
 
         if (timeElapsed < timePerFrame) {
@@ -196,7 +206,7 @@ mEngineRenderer->Submit(std::move(renderTerrain));
 
 void HiddenEngine::HandleInput() {
     // i don't like the setup of this function
-    mEngineWindow->HandleInputs(mIsRunning);
+    mEngineWindow->HandleKeyPress(mIsRunning, mCamera, mDeltaTime);
 }
 
 void HiddenEngine::Update() {

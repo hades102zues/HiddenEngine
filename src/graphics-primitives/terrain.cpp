@@ -68,7 +68,8 @@ void Terrain::GenIndices() {
 
     for (int i = 0; i < totalNumberOfVertices; i++) {
 
-        // horizontal check || vertical check
+        // Not all vertex should be wound into a triangle. 
+        // Vertices on the far-right of an edge || Vertcies with no row above
         if ( (indexBase + 1 ) % mNumVerticesAlongTerrainSide == 0 || indexBase + mNumVerticesAlongTerrainSide >= (totalNumberOfVertices)) {
             indexBase++;
             continue;

@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include <memory>
+#include "../../graphics-primitives/camera.h"
 
 class SDLWindow {
     private :
@@ -13,7 +15,7 @@ class SDLWindow {
 
         SDL_Window* Get();
         int Init();
-        void HandleInputs(bool& isRunning);
+        void HandleKeyPress(bool& isRunning,const std::shared_ptr<Camera>& gameCamera, float dt);
         void SwapBuffers();
         void Shutdown();
         void GlClear();
